@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,12 +26,12 @@ public class MainActivity<flag> extends AppCompatActivity {
     private final ArrayList<BookInfo> books = new ArrayList<>();
     private final  int PERMISSION_REQUEST_CODE = 20013;
     boolean permissionsGranted;
+//    private ProgressDialog pDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         getStorageAccessPermissions ();
         if (getDataFromFile ())
@@ -132,4 +134,16 @@ public class MainActivity<flag> extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+
+//    @Override
+//    protected Dialog onCreateDialog(int id) {
+//            pDialog = new ProgressDialog(this);
+//            pDialog.setMessage("Downloading file. Please wait...");
+//            pDialog.setIndeterminate(false);
+//            pDialog.setMax(100);
+//            pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+//            pDialog.setCancelable(true);
+//            pDialog.show();
+//            return pDialog;
+//        }
 }

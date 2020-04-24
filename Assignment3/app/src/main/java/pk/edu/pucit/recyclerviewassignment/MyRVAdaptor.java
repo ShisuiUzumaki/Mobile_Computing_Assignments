@@ -1,10 +1,13 @@
 package pk.edu.pucit.recyclerviewassignment;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +26,6 @@ import com.bumptech.glide.request.RequestOptions;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -36,11 +38,17 @@ public class MyRVAdaptor  extends RecyclerView.Adapter<MyRVAdaptor.ViewHolder>{
     private  ArrayList<BookInfo> books;
     private boolean permissionsGranted;
     private  Context mContext;
+    private Handler mHandler;
+    private ProgressDialog pDialog;
+
+
 
     public MyRVAdaptor( Context mContext,ArrayList<BookInfo> books, boolean permissionsGranted) {
         this.books = books;
         this.mContext = mContext;
         this.permissionsGranted = permissionsGranted;
+        mHandler = new Handler ();
+        pDialog = new ProgressDialog (mContext);
     }
 
 
@@ -91,16 +99,29 @@ public class MyRVAdaptor  extends RecyclerView.Adapter<MyRVAdaptor.ViewHolder>{
                 @Override
                 public void onClick(View v)
                 {
+                    pDialog.setMessage("Downloading file. Please wait...");
+                    pDialog.setIndeterminate(false);
+                    pDialog.setMax(100);
+                    pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                    pDialog.setCancelable(true);
+                    pDialog.show();
                     Runnable runnabale = new Runnable ()
                     {
                         @Override
                         public void run()
                         {
-                            if(downloadBook(url , fileName)){
-                                //Toast.makeText (mContext, "book download successful", Toast.LENGTH_LONG).show ();
-                            }
-                            else{
-                                //Toast.makeText (mContext, "book download unsuccessful", Toast.LENGTH_LONG).show ();
+                            if(downloadBook (url, fileName)){
+                                mHandler.post (
+                                          new Runnable ()
+                                          {
+                                              @Override
+                                              public void run()
+                                              {
+                                                  Toast.makeText (mContext,
+                                                            "finished downloading",
+                                                            Toast.LENGTH_SHORT).show ();
+                                              }
+                                          });
                             }
                         }
                     };
@@ -136,6 +157,9 @@ public class MyRVAdaptor  extends RecyclerView.Adapter<MyRVAdaptor.ViewHolder>{
                 httpConn.setRequestMethod("GET");
                 httpConn.setDoOutput(true);
                 httpConn.connect();
+                final int lenghtOfFile = httpConn.getContentLength();
+
+
 
 
                 File file = new File (folder,filename);
@@ -145,10 +169,19 @@ public class MyRVAdaptor  extends RecyclerView.Adapter<MyRVAdaptor.ViewHolder>{
                 InputStream is = httpConn.getInputStream();
 
                 byte[] buffer = new byte[1024*1024];
+                long total = 0;
                 int bytesToWrite = 0;
                 //String str;
                 while ((bytesToWrite = is.read(buffer)) != -1) {
                     //str = new String (buffer);
+                    total += bytesToWrite;
+                    final long finalTotal = total;
+                    mHandler.post (new Runnable () {
+                                    @Override
+                                    public void run() {
+                                        int percentage = (int) ((finalTotal *100)/lenghtOfFile);
+                                        pDialog.setProgress (percentage);
+                                    }});
                     fos.write(buffer, 0, bytesToWrite);
                 }
                 is.close();
@@ -158,6 +191,7 @@ public class MyRVAdaptor  extends RecyclerView.Adapter<MyRVAdaptor.ViewHolder>{
             }
             catch (Exception e) {
                 //Log.d("PortfolioManger", "Error: " + e);
+                flag = false;
                 Toast.makeText (mContext, e.getMessage (), Toast.LENGTH_LONG).show ();
             }
 
@@ -165,6 +199,7 @@ public class MyRVAdaptor  extends RecyclerView.Adapter<MyRVAdaptor.ViewHolder>{
         else{
 
         }
+        pDialog.dismiss ();
         return flag;
     }
 
@@ -172,6 +207,7 @@ public class MyRVAdaptor  extends RecyclerView.Adapter<MyRVAdaptor.ViewHolder>{
     public int getItemCount() {
         return books.size();
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
