@@ -6,4 +6,7 @@
     <color name="LightGreen">#05E361</color>
     <color name="DarkGreen">#07AE4C</color>
     <color name="WhiteColor">#fff</color>
+    <color name="BlackColor">#000</color>
+    <color name="LighBlackColor">#676666</color>
+    <color name="LightWhite">#F1ECEC</color>
 </resources>
