@@ -9,4 +9,6 @@
     <color name="BlackColor">#000</color>
     <color name="LighBlackColor">#676666</color>
     <color name="LightWhite">#F1ECEC</color>
+    <color name="ColorGray">#BDB9B9</color>
+    <color name="fab_pressed">#546e7a</color>
 </resources>

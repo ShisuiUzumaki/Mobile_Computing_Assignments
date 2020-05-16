@@ -1,446 +1,479 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddReminder">
-
-
-    <include
-        android:id="@+id/AddReminderToolbar"
-        layout = "@layout/add_remider__toolbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+    >
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/CLForReminderTitle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintVertical_bias="0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/AddReminderToolbar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@color/LightGreen"
-        android:elevation="10dp">
+        android:layout_height="match_parent"
+        tools:context=".AddReminder">
 
-        <EditText
-            android:id="@+id/ReminderTitle"
-            android:layout_width="match_parent"
-            android:layout_height="140dp"
-            android:gravity="top|start"
-            android:lines="4"
-            android:minLines="4"
-            android:hint="@string/ReminderTitle"
-            android:inputType="textCapWords|textMultiLine"
-            android:layout_marginStart="72dp"
-            android:layout_marginEnd="16dp"
-            android:scrollHorizontally="false"
-            android:textColor="@color/WhiteColor"
-            android:textColorHint="@color/LightWhite"
-            app:layout_constraintStart_toStartOf="parent"
+
+        <include
+            android:id="@+id/AddReminderToolbar"
+            layout = "@layout/add_remider__toolbar"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/CLForReminderTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/AddReminderToolbar"
             app:layout_constraintBottom_toBottomOf="parent"
-            />
+            android:background="@color/LightGreen"
+            android:elevation="10dp">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <ScrollView
-        android:id="@+id/ReminderScrollView"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        app:layout_constraintTop_toBottomOf="@id/CLForReminderTitle"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_marginTop="8dp"
-            android:text="@string/ReminderDetails"
-            android:id="@+id/ReminderDetails"
-            android:textSize="15sp"
-            android:gravity="center_vertical"
-            android:layout_marginStart="72dp"
-            android:textColor="@color/BlackColor"
-            android:layout_height="72dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-
-            />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/Date"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:clickable="true"
-            android:onClick="setDate"
-            android:background="?android:attr/selectableItemBackground"
-            app:layout_constraintTop_toBottomOf="@id/ReminderDetails"
-            app:layout_constraintBottom_toTopOf="@id/Time"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            >
-
-            <ImageView
-                android:id="@+id/DateIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="32dp"
-                android:src="@drawable/ic_view_day"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/Date"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0"
-                android:contentDescription="Date icon" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/CLForDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                app:layout_constraintHorizontal_bias="0"
-                android:layout_marginStart="33dp"
-                app:layout_constraintStart_toEndOf="@id/DateIcon"
-                app:layout_constraintEnd_toEndOf="@id/Date"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                >
-
-                <TextView
-                    android:id="@+id/date_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:textColor="@color/BlackColor"
-                    android:text="@string/ReminderDate"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/set_date"
-                    app:layout_constraintEnd_toEndOf="parent"/>
-
-                <TextView
-                    android:id="@+id/set_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:textColor="@color/LighBlackColor"
-                    app:layout_constraintTop_toBottomOf="@id/date_text"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="@id/CLForDate"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/Time"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:clickable="true"
-            android:onClick="setTime"
-            android:background="?android:attr/selectableItemBackground"
-            app:layout_constraintTop_toBottomOf="@id/Date"
-            app:layout_constraintBottom_toTopOf="@id/Repeat"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-            <ImageView
-                android:id="@+id/TimeIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="32dp"
-                android:src="@drawable/ic_access_time"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/Time"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:contentDescription="Time icon" />
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/CLForTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                app:layout_constraintHorizontal_bias="0"
-                android:layout_marginStart="33dp"
-                app:layout_constraintStart_toEndOf="@id/TimeIcon"
-                app:layout_constraintEnd_toEndOf="@id/Time"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
-
-                <TextView
-                    android:id="@+id/time_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:textColor="@color/BlackColor"
-                    android:text="@string/ReminderTime"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/set_time"
-                    app:layout_constraintEnd_toEndOf="parent"/>
-
-                <TextView
-                    android:id="@+id/set_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:textColor="@color/LighBlackColor"
-                    app:layout_constraintTop_toBottomOf="@id/time_text"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="@id/CLForTime"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/Repeat"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:clickable="false"
-            android:background="?android:attr/selectableItemBackground"
-            app:layout_constraintTop_toBottomOf="@id/Time"
-            app:layout_constraintBottom_toTopOf="@id/RepeatInterval"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-            <ImageView
-                android:id="@+id/RepeatIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="32dp"
-                android:src="@drawable/ic_repeat_1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/Repeat"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0"
-                android:contentDescription="Repeat  icon" />
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/CLForRepeat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                app:layout_constraintHorizontal_bias="0"
-                android:layout_marginStart="33dp"
-                app:layout_constraintStart_toEndOf="@id/RepeatIcon"
-                app:layout_constraintEnd_toEndOf="@id/Repeat"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
-
-                <TextView
-                    android:id="@+id/repeat_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:textColor="@color/BlackColor"
-                    android:text="@string/ReminderRepeat"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/set_repeat"
-                    app:layout_constraintEnd_toEndOf="parent"/>
-
-                <TextView
-                    android:id="@+id/set_repeat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:textColor="@color/LighBlackColor"
-                    app:layout_constraintTop_toBottomOf="@id/repeat_text"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="@id/CLForRepeat"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <Switch
-                android:id="@+id/repeat_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+            <EditText
+                android:id="@+id/ReminderTitle"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:gravity="top|start"
+                android:lines="4"
+                android:minLines="4"
+                android:hint="@string/ReminderTitle"
+                android:inputType="textCapWords|textMultiLine"
+                android:layout_marginStart="72dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginStart="8dp"
-                android:onClick="onSwitchRepeat"
-                android:checked="true"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:scrollHorizontally="false"
+                android:textColor="@color/WhiteColor"
+                android:textColorHint="@color/LightWhite"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:textOn="On"
-                android:textOff="Off"/>
+                app:layout_constraintTop_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/RepeatInterval"
+        <ScrollView
+            android:id="@+id/ReminderScrollView"
+            android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:clickable="true"
-            android:onClick="setRepeatNo"
-            android:background="?android:attr/selectableItemBackground"
-            app:layout_constraintTop_toBottomOf="@id/Repeat"
-            app:layout_constraintBottom_toTopOf="@id/RepeatType"
+            app:layout_constraintTop_toBottomOf="@id/CLForReminderTitle"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <ImageView
-                android:id="@+id/RepeatNoIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="32dp"
-                android:src="@drawable/ic_repeat_interval"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/RepeatInterval"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:contentDescription="Repeat icon" />
-
-
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/CLForRepeatNo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                app:layout_constraintHorizontal_bias="0"
-                android:layout_marginStart="33dp"
-                app:layout_constraintStart_toEndOf="@id/RepeatNoIcon"
-                app:layout_constraintEnd_toEndOf="@id/RepeatInterval"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/repeat_no_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/ReminderDetails"
+                    android:id="@+id/ReminderDetails"
                     android:textSize="15sp"
+                    android:gravity="center_vertical"
+                    android:layout_marginStart="72dp"
                     android:textColor="@color/BlackColor"
-                    android:text="@string/ReminderTime"
+                    android:layout_height="72dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/set_repeat_no"
-                    app:layout_constraintEnd_toEndOf="parent"/>
-
-                <TextView
-                    android:id="@+id/set_repeat_no"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:textColor="@color/LighBlackColor"
-                    app:layout_constraintTop_toBottomOf="@id/repeat_no_text"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="@id/CLForRepeatNo"
                     app:layout_constraintEnd_toEndOf="parent"
+
                     />
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/Date"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:clickable="true"
+                    android:onClick="setDate"
+                    android:background="?android:attr/selectableItemBackground"
+                    app:layout_constraintTop_toBottomOf="@id/ReminderDetails"
+                    app:layout_constraintBottom_toTopOf="@id/Time"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    >
+
+                    <ImageView
+                        android:id="@+id/DateIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="32dp"
+                        android:src="@drawable/ic_view_day"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="@id/Date"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintHorizontal_bias="0"
+                        android:contentDescription="Date icon" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/CLForDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        app:layout_constraintHorizontal_bias="0"
+                        android:layout_marginStart="33dp"
+                        app:layout_constraintStart_toEndOf="@id/DateIcon"
+                        app:layout_constraintEnd_toEndOf="@id/Date"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        >
+
+                        <TextView
+                            android:id="@+id/date_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="@color/BlackColor"
+                            android:text="@string/ReminderDate"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toTopOf="@id/set_date"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+
+                        <TextView
+                            android:id="@+id/set_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="@color/LighBlackColor"
+                            app:layout_constraintTop_toBottomOf="@id/date_text"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="@id/CLForDate"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/Time"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:clickable="true"
+                    android:onClick="setTime"
+                    android:background="?android:attr/selectableItemBackground"
+                    app:layout_constraintTop_toBottomOf="@id/Date"
+                    app:layout_constraintBottom_toTopOf="@id/Repeat"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <ImageView
+                        android:id="@+id/TimeIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="32dp"
+                        android:src="@drawable/ic_access_time"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="@id/Time"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:contentDescription="Time icon" />
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/CLForTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        app:layout_constraintHorizontal_bias="0"
+                        android:layout_marginStart="33dp"
+                        app:layout_constraintStart_toEndOf="@id/TimeIcon"
+                        app:layout_constraintEnd_toEndOf="@id/Time"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent">
+
+                        <TextView
+                            android:id="@+id/time_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="@color/BlackColor"
+                            android:text="@string/ReminderTime"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toTopOf="@id/set_time"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+
+                        <TextView
+                            android:id="@+id/set_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="@color/LighBlackColor"
+                            app:layout_constraintTop_toBottomOf="@id/time_text"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="@id/CLForTime"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/Repeat"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:clickable="false"
+                    android:background="?android:attr/selectableItemBackground"
+                    app:layout_constraintTop_toBottomOf="@id/Time"
+                    app:layout_constraintBottom_toTopOf="@id/RepeatInterval"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <ImageView
+                        android:id="@+id/RepeatIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="32dp"
+                        android:src="@drawable/ic_repeat_1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="@id/Repeat"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintHorizontal_bias="0"
+                        android:contentDescription="Repeat  icon" />
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/CLForRepeat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        app:layout_constraintHorizontal_bias="0"
+                        android:layout_marginStart="33dp"
+                        app:layout_constraintStart_toEndOf="@id/RepeatIcon"
+                        app:layout_constraintEnd_toEndOf="@id/Repeat"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent">
+
+                        <TextView
+                            android:id="@+id/repeat_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="@color/BlackColor"
+                            android:text="@string/ReminderRepeat"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toTopOf="@id/set_repeat"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+
+                        <TextView
+                            android:id="@+id/set_repeat"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="@color/LighBlackColor"
+                            app:layout_constraintTop_toBottomOf="@id/repeat_text"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="@id/CLForRepeat"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <Switch
+                        android:id="@+id/repeat_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="8dp"
+                        android:onClick="onSwitchRepeat"
+                        android:checked="true"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:textOn="On"
+                        android:textOff="Off"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/RepeatInterval"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:clickable="true"
+                    android:onClick="setRepeatNo"
+                    android:background="?android:attr/selectableItemBackground"
+                    app:layout_constraintTop_toBottomOf="@id/Repeat"
+                    app:layout_constraintBottom_toTopOf="@id/RepeatType"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <ImageView
+                        android:id="@+id/RepeatNoIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="32dp"
+                        android:src="@drawable/ic_repeat_interval"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="@id/RepeatInterval"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:contentDescription="Repeat icon" />
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/CLForRepeatNo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        app:layout_constraintHorizontal_bias="0"
+                        android:layout_marginStart="33dp"
+                        app:layout_constraintStart_toEndOf="@id/RepeatNoIcon"
+                        app:layout_constraintEnd_toEndOf="@id/RepeatInterval"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent">
+
+                        <TextView
+                            android:id="@+id/repeat_no_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="@color/BlackColor"
+                            android:text="@string/ReminderTime"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toTopOf="@id/set_repeat_no"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+
+                        <TextView
+                            android:id="@+id/set_repeat_no"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="@color/LighBlackColor"
+                            app:layout_constraintTop_toBottomOf="@id/repeat_no_text"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="@id/CLForRepeatNo"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/RepeatType"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:clickable="true"
+                    android:onClick="selectRepeatType"
+                    android:background="?android:attr/selectableItemBackground"
+                    app:layout_constraintTop_toBottomOf="@id/RepeatInterval"
+                    app:layout_constraintBottom_toTopOf="@id/parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <ImageView
+                        android:id="@+id/RepeatTypeIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="32dp"
+                        android:src="@drawable/ic_subject"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="@id/RepeatType"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:contentDescription="Repeat icon" />
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/CLForRepeatType"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        app:layout_constraintHorizontal_bias="0"
+                        android:layout_marginStart="33dp"
+                        app:layout_constraintStart_toEndOf="@id/RepeatTypeIcon"
+                        app:layout_constraintEnd_toEndOf="@id/RepeatType"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent">
+
+                        <TextView
+                            android:id="@+id/repeat_type_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="@color/BlackColor"
+                            android:text="@string/ReminderRepeatType"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toTopOf="@id/set_repeat_type"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+
+                        <TextView
+                            android:id="@+id/set_repeat_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="@color/LighBlackColor"
+                            app:layout_constraintTop_toBottomOf="@id/repeat_type_text"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="@id/CLForRepeatType"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/RepeatType"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:clickable="true"
-            android:onClick="selectRepeatType"
-            android:background="?android:attr/selectableItemBackground"
-            app:layout_constraintTop_toBottomOf="@id/RepeatInterval"
-            app:layout_constraintBottom_toTopOf="@id/parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-            <ImageView
-                android:id="@+id/RepeatTypeIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="32dp"
-                android:src="@drawable/ic_subject"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/RepeatType"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:contentDescription="Repeat icon" />
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/CLForRepeatType"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                app:layout_constraintHorizontal_bias="0"
-                android:layout_marginStart="33dp"
-                app:layout_constraintStart_toEndOf="@id/RepeatTypeIcon"
-                app:layout_constraintEnd_toEndOf="@id/RepeatType"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
-
-                <TextView
-                    android:id="@+id/repeat_type_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:textColor="@color/BlackColor"
-                    android:text="@string/ReminderRepeatType"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/set_repeat_type"
-                    app:layout_constraintEnd_toEndOf="parent"/>
-
-                <TextView
-                    android:id="@+id/set_repeat_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:textColor="@color/LighBlackColor"
-                    app:layout_constraintTop_toBottomOf="@id/repeat_type_text"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="@id/CLForRepeatType"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
+            android:layout_height="2dp"
+            app:layout_constraintTop_toBottomOf="@id/AddReminderToolbar"
+            android:background="@drawable/toolbar_dropshadow" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_notifications_white"
+        app:fabSize="normal"
+        android:clickable="true"
+        android:onClick="selectFab1"
+        android:translationZ="15dp"
+        app:layout_constraintTop_toBottomOf="@id/AddReminderToolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="165dp"
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:src="@drawable/ic_done_white"
+        app:fabSize="normal"
+        android:layout_margin="16dp"
+        android:layout_marginEnd="24dp"/>
 
 
-
-
-    </ScrollView>
-
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

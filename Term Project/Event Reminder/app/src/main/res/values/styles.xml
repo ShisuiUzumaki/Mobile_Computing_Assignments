@@ -5,7 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/LightGreen</item>
         <item name="colorPrimaryDark">@color/DarkGreen</item>
-        <item name="colorAccent">#E86B0F</item>
+        <item name="colorAccent">#009900</item>
         <item name="android:navigationBarColor">#47A64A</item>
         <item name="actionBarPopupTheme">@style/PopupMenu</item>
 
@@ -34,7 +34,7 @@
     <style name="AddReminderTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/LightGreen</item>
         <item name="colorPrimaryDark">@color/DarkGreen</item>
-        <item name="colorAccent">#E86B0F</item>
+        <item name="colorAccent">#009900</item>
         <item name="android:navigationBarColor">#47A64A</item>
     </style>
 

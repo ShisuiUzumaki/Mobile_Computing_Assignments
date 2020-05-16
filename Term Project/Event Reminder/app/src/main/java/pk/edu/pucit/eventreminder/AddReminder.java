@@ -43,4 +43,7 @@ public class AddReminder extends AppCompatActivity {
 
           public void setDate(View view) {
           }
+
+          public void selectFab1(View view) {
+          }
 }

@@ -51,5 +51,10 @@ dependencies {
     //recyclerview
     implementation 'com.bignerdranch.android:recyclerview-multiselect:0.2'
 
+    // floating action button
+    compile 'com.getbase:floatingactionbutton:1.9.0'
+
+    
+    compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
 
 }
