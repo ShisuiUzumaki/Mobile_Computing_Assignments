@@ -11,4 +11,17 @@
     <string name="ReminderRepeatType">Repeat Type</string>
     <string name="ReminderTitle">Title</string>
     <string name="NoCardetails">Click on the button below to begin creating your reminder!</string>
+    <string name="ActionSaveReminder">Save Reminder</string>
+    <string name="ActionDeleteReminder">Dlete Reminder</string>
+    <string name="ReminderRepeatInterval">Repeat Interval</string>
+    <string name="UnsavedChangesDialogMsg">You haven\'t saved the changes you have made. Are you sure you want to discard them?</string>
+    <string name="DiscardChanges">discard</string>
+    <string name="KeepEditing">Keep</string>
+    <string name="DeleteDialogMsg">Are you sure you want to delete the reminder</string>
+    <string name="delete">delete</string>
+    <string name="Cancel">cancel</string>
+    <string name="EditorDeleteReminderFailed">There was an error while deleting the reminder. Please fix the error and try again.</string>
+    <string name="EditorDeleteReminderSuccessful">Reminder deleted successfully.</string>
+    <string name="RepeatOff">off</string>
+    <string name="AddReminderActivity_NewReminder">Add Reminder</string>
 </resources>

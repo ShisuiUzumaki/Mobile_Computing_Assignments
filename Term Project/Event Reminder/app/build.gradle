@@ -54,7 +54,12 @@ dependencies {
     // floating action button
     compile 'com.getbase:floatingactionbutton:1.9.0'
 
+    // Date Time picker
+    compile 'com.wdullaer:materialdatetimepicker:1.2.1'
+
     
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+    implementation 'androidx.navigation:navigation-fragment:2.2.2'
+    implementation 'androidx.navigation:navigation-ui:2.2.2'
 
 }

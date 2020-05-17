@@ -128,8 +128,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15sp"
+                            android:gravity="start"
                             android:textColor="@color/BlackColor"
                             android:text="@string/ReminderDate"
+                            app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintBottom_toTopOf="@id/set_date"
@@ -137,9 +139,11 @@
 
                         <TextView
                             android:id="@+id/set_date"
+                            android:gravity="start"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15sp"
+                            app:layout_constraintHorizontal_bias="0.0"
                             android:textColor="@color/LighBlackColor"
                             app:layout_constraintTop_toBottomOf="@id/date_text"
                             app:layout_constraintStart_toStartOf="parent"
@@ -195,6 +199,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15sp"
+                            android:gravity="start"
+                            app:layout_constraintHorizontal_bias="0.0"
                             android:textColor="@color/BlackColor"
                             android:text="@string/ReminderTime"
                             app:layout_constraintTop_toTopOf="parent"
@@ -204,9 +210,11 @@
 
                         <TextView
                             android:id="@+id/set_time"
+                            android:gravity="start"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15sp"
+                            app:layout_constraintHorizontal_bias="0.0"
                             android:textColor="@color/LighBlackColor"
                             app:layout_constraintTop_toBottomOf="@id/time_text"
                             app:layout_constraintStart_toStartOf="parent"
@@ -262,7 +270,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15sp"
+                            android:gravity="start"
                             android:textColor="@color/BlackColor"
+                            app:layout_constraintHorizontal_bias="0.0"
                             android:text="@string/ReminderRepeat"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -271,9 +281,11 @@
 
                         <TextView
                             android:id="@+id/set_repeat"
+                            android:gravity="start"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15sp"
+                            app:layout_constraintHorizontal_bias="0.0"
                             android:textColor="@color/LighBlackColor"
                             app:layout_constraintTop_toBottomOf="@id/repeat_text"
                             app:layout_constraintStart_toStartOf="parent"
@@ -345,8 +357,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15sp"
+                            android:gravity="start"
+                            app:layout_constraintHorizontal_bias="0.0"
                             android:textColor="@color/BlackColor"
-                            android:text="@string/ReminderTime"
+                            android:text="@string/ReminderRepeatInterval"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintBottom_toTopOf="@id/set_repeat_no"
@@ -354,9 +368,11 @@
 
                         <TextView
                             android:id="@+id/set_repeat_no"
+                            android:gravity="start"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15sp"
+                            app:layout_constraintHorizontal_bias="0.0"
                             android:textColor="@color/LighBlackColor"
                             app:layout_constraintTop_toBottomOf="@id/repeat_no_text"
                             app:layout_constraintStart_toStartOf="parent"
@@ -377,7 +393,7 @@
                     android:onClick="selectRepeatType"
                     android:background="?android:attr/selectableItemBackground"
                     app:layout_constraintTop_toBottomOf="@id/RepeatInterval"
-                    app:layout_constraintBottom_toTopOf="@id/parent"
+                    app:layout_constraintBottom_toTopOf="@id/RepeatInterval"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent">
 
@@ -412,20 +428,24 @@
                             android:id="@+id/repeat_type_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="15sp"
-                            android:textColor="@color/BlackColor"
                             android:text="@string/ReminderRepeatType"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
+                            android:textColor="@color/BlackColor"
+                            android:textSize="15sp"
                             app:layout_constraintBottom_toTopOf="@id/set_repeat_type"
-                            app:layout_constraintEnd_toEndOf="parent"/>
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             android:id="@+id/set_repeat_type"
+                            android:gravity="start"
+                            android:textAlignment="viewStart"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15sp"
                             android:textColor="@color/LighBlackColor"
+                            app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintTop_toBottomOf="@id/repeat_type_text"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintBottom_toBottomOf="@id/CLForRepeatType"
@@ -464,16 +484,6 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="165dp"
         />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:src="@drawable/ic_done_white"
-        app:fabSize="normal"
-        android:layout_margin="16dp"
-        android:layout_marginEnd="24dp"/>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

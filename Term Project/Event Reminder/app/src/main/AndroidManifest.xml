@@ -16,12 +16,13 @@
         android:theme="@style/AppTheme">
         <provider
             android:name=".data.ERContentProvider"
-            android:authorities="pk.pucit.edu.ERContentProvider"
+            android:authorities="pk.edu.pucit.eventreminder"
             android:enabled="true"
-            android:exported="true"></provider>
+            android:exported="true" />
 
         <activity
             android:name=".AddReminder"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/AddReminderTheme" />
         <activity android:name=".MainActivity" />
         <activity

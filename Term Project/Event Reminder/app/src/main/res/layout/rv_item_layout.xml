@@ -34,7 +34,7 @@
             android:ellipsize="end"
             android:textColor="@color/BlackColor"
             android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@id/RVDateTime"
+            app:layout_constraintBottom_toTopOf="@id/RVIDateTime"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,10 +50,10 @@
             android:textSize="15sp"
             android:textColor="@color/LighBlackColor"
             tools:text="Date and Time"
-            app:layout_constraintTop_toBottomOf="@id/RVTitle"
+            app:layout_constraintTop_toBottomOf="@id/RVITitle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/RVRepeatInfo"/>
+            app:layout_constraintBottom_toTopOf="@id/RVIRepeatInfo"/>
 
         <TextView
             android:id="@+id/RVIRepeatInfo"
@@ -64,7 +64,7 @@
             android:textSize="15sp"
             android:textColor="@color/LighBlackColor"
             tools:text="Repeat No and Type"
-            app:layout_constraintTop_toBottomOf="@id/RVDateTime"
+            app:layout_constraintTop_toBottomOf="@id/RVIDateTime"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -72,6 +72,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
+        android:id="@+id/ActiveImage"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="16dp"
@@ -79,7 +80,6 @@
         android:layout_marginTop="16dp"
         android:src="@drawable/ic_notifications"
         android:layout_centerVertical="true"
-        android:id="@+id/ActiveImage"
         app:layout_constraintStart_toEndOf="@id/TextRegion"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>

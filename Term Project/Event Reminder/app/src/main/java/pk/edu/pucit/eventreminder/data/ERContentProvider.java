@@ -2,10 +2,30 @@ package pk.edu.pucit.eventreminder.data;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
 
 public class ERContentProvider extends ContentProvider {
+
+          public static final String LOG_TAG = ERContentProvider.class.getSimpleName();
+
+          private static final int REMINDER = 100;
+
+          private static final int REMINDER_ID = 101;
+
+          private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+
+          static {
+
+                    sUriMatcher.addURI(ERContract.CONTENT_AUTHORITY,
+                              ERContract.ER_TABLE_PATH, REMINDER);
+
+                    sUriMatcher.addURI(ERContract.CONTENT_AUTHORITY,
+                              ERContract.ER_TABLE_PATH + "/#", REMINDER_ID);
+
+          }
+
           public ERContentProvider() {
           }
 

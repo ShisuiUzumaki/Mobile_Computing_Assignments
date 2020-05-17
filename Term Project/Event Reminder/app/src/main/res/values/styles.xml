@@ -27,9 +27,10 @@
         <item name="colorPrimary">@color/WhiteColor</item>
         <item name="colorPrimaryDark">@color/WhiteColor</item>
         <item name="colorAccent">#E86B0F</item>
+        <item name="android:textColorPrimary">@color/WhiteColor</item>
         <item name="android:navigationBarColor">@color/WhiteColor</item>
-
     </style>
+
 
     <style name="AddReminderTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/LightGreen</item>
@@ -37,6 +38,7 @@
         <item name="colorAccent">#009900</item>
         <item name="android:navigationBarColor">#47A64A</item>
     </style>
+
 
     <style name="MyToolbarTheme" parent="ThemeOverlay.AppCompat.Light">
         <!--  for the text of the toolbar  -->

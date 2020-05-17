@@ -51,4 +51,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                     return true;
           }
+
+          public void addReminder(View view) {
+                    startActivity (new Intent (this, AddReminder.class));
+          }
 }
