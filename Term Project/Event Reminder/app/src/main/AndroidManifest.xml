@@ -14,6 +14,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <receiver
+            android:name=".eventReminder.ERReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
         <provider
             android:name=".data.ERContentProvider"
             android:authorities="pk.edu.pucit.eventreminder"
@@ -34,6 +39,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service android:name=".eventReminder.ERService"
+            android:exported="false"/>
     </application>
 
 </manifest>

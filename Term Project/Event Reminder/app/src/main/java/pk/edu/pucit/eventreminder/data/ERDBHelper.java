@@ -12,8 +12,8 @@ public class ERDBHelper extends SQLiteOpenHelper {
 
           private static final int DATABASE_VERSION = 1;
 
-          public ERDBHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
-                    super (context, DATABASE_NAME, factory, DATABASE_VERSION);
+          ERDBHelper(@Nullable Context context) {
+                    super (context, DATABASE_NAME, null, DATABASE_VERSION);
           }
 
           @Override
@@ -21,14 +21,13 @@ public class ERDBHelper extends SQLiteOpenHelper {
 
                     String SQL_CREATE_ALARM_TABLE =  "CREATE TABLE "
                               + ERContract.EREntry.TABLE_NAME + " ("
-                              + ERContract.EREntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                              + ERContract.EREntry.EVENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                               + ERContract.EREntry.EVENT_TITLE + " TEXT NOT NULL, "
                               + ERContract.EREntry.EVENT_DATE + " TEXT NOT NULL, "
                               + ERContract.EREntry.EVENT_TIME + " TEXT NOT NULL, "
                               + ERContract.EREntry.EVENT_REPEAT + " TEXT NOT NULL, "
                               + ERContract.EREntry.EVENT_REPEAT_NO + " TEXT NOT NULL, "
-                              + ERContract.EREntry.EVENT_REPEAT_TYPE + " TEXT NOT NULL, "
-                              + ERContract.EREntry.EVENT_ACTIVE + "TEXT ,"
+                              + ERContract.EREntry.EVENT_REPEAT_TYPE + " TEXT NOT NULL"
                               + " );";
 
                     // Execute the SQL statement

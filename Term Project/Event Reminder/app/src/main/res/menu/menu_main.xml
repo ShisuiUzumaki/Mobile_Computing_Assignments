@@ -8,7 +8,7 @@
         android:orderInCategory="100"
         android:title="@string/add"
         android:tooltipText="Add a new Event"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/Settings"
@@ -16,7 +16,7 @@
         android:orderInCategory="100"
         android:title="@string/settings"
         android:tooltipText="Open settings"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/Help"
@@ -24,6 +24,6 @@
         android:orderInCategory="100"
         android:title="@string/help"
         android:tooltipText="Get help"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="never"/>
 
 </menu>

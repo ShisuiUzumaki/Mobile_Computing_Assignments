@@ -1,27 +1,31 @@
 package pk.edu.pucit.eventreminder;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
+import android.app.LoaderManager;;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.LoaderManager;
 //import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 //import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 //import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
+import android.content.CursorLoader;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.Loader;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -33,18 +37,21 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
-
 
 import java.util.Calendar;
 import java.util.Objects;
 
+import pk.edu.pucit.eventreminder.data.ERContract;
+import pk.edu.pucit.eventreminder.eventReminder.ERScheduler;
+
 public
 class AddReminder extends AppCompatActivity implements
           TimePickerDialog.OnTimeSetListener,
-          DatePickerDialog.OnDateSetListener{
+          DatePickerDialog.OnDateSetListener,
+          LoaderManager.LoaderCallbacks<Cursor> {
 
+
+          private static final int EXISTING_VEHICLE_LOADER = 24907;
 
           Toolbar myToolbar;
           private EditText mTitleText;
@@ -54,6 +61,7 @@ class AddReminder extends AppCompatActivity implements
           private long mRepeatTime;
           private Switch mRepeatSwitch;
           private String mTitle;
+          private String mOldTitl;
           private String mTime;
           private String mDate;
           private String mRepeat;
@@ -81,9 +89,11 @@ class AddReminder extends AppCompatActivity implements
           private static final long milWeek = 604800000L;
           private static final long milMonth = 2592000000L;
 
-          private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
+          private View.OnTouchListener mTouchListener
+                    = new View.OnTouchListener() {
                     @Override
-                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                    public boolean onTouch(View view, MotionEvent motionEvent)
+                    {
                               mReminderHasChanged = true;
                               return false;
                     }
@@ -95,7 +105,9 @@ class AddReminder extends AppCompatActivity implements
                     setContentView (R.layout.activity_add_reminder);
                     myToolbar = (Toolbar) findViewById (R.id.AddReminderToolbar);
                     setSupportActionBar (myToolbar);
-                    Objects.requireNonNull (getSupportActionBar ()).setDisplayHomeAsUpEnabled (true);
+                    Objects.requireNonNull (getSupportActionBar ())
+                              .setDisplayHomeAsUpEnabled (true);
+                    Objects.requireNonNull (getSupportActionBar()).setHomeButtonEnabled(true);
                     Objects.requireNonNull (getSupportActionBar ()).setTitle("Add Reminder");
                     myToolbar.setSubtitle("by Shisui Uzumaki");
 
@@ -110,19 +122,97 @@ class AddReminder extends AppCompatActivity implements
                     mRepeatSwitch.setChecked (false);
                     mRepeatText.setText ("off");
 
+                    // Initialize default values
+                    mActive = "true";
+                    mRepeat = "true";
+                    mRepeatNo = Integer.toString(1);
+                    mRepeatType = "Hour";
+
+                    mCalendar = Calendar.getInstance();
+                    mHour = mCalendar.get(Calendar.HOUR_OF_DAY);
+                    mMinute = mCalendar.get(Calendar.MINUTE);
+                    mYear = mCalendar.get(Calendar.YEAR);
+                    mMonth = mCalendar.get(Calendar.MONTH) + 1;
+                    mDay = mCalendar.get(Calendar.DATE);
+
+                    if(mMonth < 10){
+                              mDate = mDay + "/0" + mMonth + "/" + mYear;
+                    }else{
+                              mDate = mDay + "/" + mMonth + "/" + mYear;
+                    }
+                    mTime = generateTimeInAmOrPm(mHour ,mMinute);
+
+                    // Setup Reminder Title EditText
+                    mTitleText.addTextChangedListener(new TextWatcher () {
+
+                              @Override
+                              public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                              @Override
+                              public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                        mTitle = s.toString().trim();
+                                        mTitleText.setError(null);
+                              }
+
+                              @Override
+                              public void afterTextChanged(Editable s) {}
+                    });
+
+                    // Setup TextViews using reminder values
+                    mDateText.setText(mDate);
+                    mTimeText.setText(mTime);
+                    mRepeatNoText.setText(mRepeatNo);
+                    mRepeatTypeText.setText(mRepeatType);
+                    mRepeatSwitch.setChecked (true);
+                    mRepeatText.setText("Every " + mRepeatNo + " " + mRepeatType + "(s)");
+                    Intent intent = getIntent();
+                    mCurrentReminderUri = intent.getData();
                     // check if its a new reminder
                     if (mCurrentReminderUri == null) {
-
-                              setTitle(getString(R.string.AddReminderActivity_NewReminder));
+                              mOldTitl = "";
+                              myToolbar.setTitle (getString(R.string.AddReminderActivity_NewReminder));
 
                               // Invalidate the options menu, so the "Delete" menu option can be hidden.
                               // (It doesn't make sense to delete a reminder that hasn't been created yet.)
                               invalidateOptionsMenu();
                     }
+                    else {
+                              myToolbar.setTitle (getString(R.string.EditorActivityTitleEditReminder));
+                              getLoaderManager().initLoader(EXISTING_VEHICLE_LOADER, null, this);
+                    }
 
 //                    if(Build.VERSION.SDK_INT  >= Build.VERSION_CODES.LOLLIPOP){
 //                              myToolbar.setElevation(10f);
 //                    }
+
+                    // To save state on device rotation
+                    if (savedInstanceState != null) {
+                              String savedTitle = savedInstanceState.getString(KEY_TITLE);
+                              mTitleText.setText(savedTitle);
+                              mTitle = savedTitle;
+
+                              String savedTime = savedInstanceState.getString(KEY_TIME);
+                              mTimeText.setText(savedTime);
+                              mTime = savedTime;
+
+                              String savedDate = savedInstanceState.getString(KEY_DATE);
+                              mDateText.setText(savedDate);
+                              mDate = savedDate;
+
+                              String saveRepeat = savedInstanceState.getString(KEY_REPEAT);
+                              mRepeatText.setText(saveRepeat);
+                              mRepeat = saveRepeat;
+
+                              String savedRepeatNo = savedInstanceState.getString(KEY_REPEAT_NO);
+                              mRepeatNoText.setText(savedRepeatNo);
+                              mRepeatNo = savedRepeatNo;
+
+                              String savedRepeatType = savedInstanceState.getString(KEY_REPEAT_TYPE);
+                              mRepeatTypeText.setText(savedRepeatType);
+                              mRepeatType = savedRepeatType;
+
+                              mActive = savedInstanceState.getString(KEY_ACTIVE);
+                    }
 
           }
 
@@ -173,21 +263,25 @@ class AddReminder extends AppCompatActivity implements
                                                   mTitleText.setError("Reminder Title cannot be blank!");
                                         }
                                         else {
-                                                  // TODO saveReminder
-                                                  ///saveReminder();
+                                                  saveEventReminder();
                                                   finish();
                                         }
                                         return true;
                               // Respond to a click on the "Delete" menu option
                               case R.id.discard_reminder:
                                         // Pop up confirmation dialog for deletion
-                                        //TODO Show delete confirmation dialog box
                                         showDeleteConfirmationDialog();
                                         return true;
                               // Respond to a click on the "Up" arrow button in the app bar
                               case android.R.id.home:
                                         // If the reminder hasn't changed, continue with navigating up to parent activity
                                         // which is the {@link MainActivity}.
+                                        if(!mTitleText.getText ().toString ().equals ("") && this.mOldTitl.equals("")){
+                                                  mReminderHasChanged = true;
+                                        }
+                                        else if(!mTitleText.getText ().toString ().equals (mOldTitl)){
+                                                  mReminderHasChanged = true;
+                                        }
                                         if (!mReminderHasChanged) {
                                                   NavUtils.navigateUpFromSameTask(AddReminder.this);
                                                   return true;
@@ -201,7 +295,7 @@ class AddReminder extends AppCompatActivity implements
                                                             @Override
                                                             public void onClick(DialogInterface dialogInterface, int i) {
                                                                       // User clicked "Discard" button, navigate to parent activity.
-                                                                      NavUtils.navigateUpFromSameTask(AddReminder.this);
+                                                                      NavUtils.navigateUpFromSameTask (AddReminder.this);
                                                             }
                                                   };
 
@@ -315,29 +409,22 @@ class AddReminder extends AppCompatActivity implements
           @Override
           public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                     mDay = dayOfMonth;
-                    mMonth = month;
+                    mMonth = month+1;
                     mYear = year;
-                    mDate = dayOfMonth + "/" + month + "/" + year;
+                    month = month +1;
+                    if(month < 10){
+                              mDate = dayOfMonth + "/0" + month + "/" + year;
+                    }else{
+                              mDate = dayOfMonth + "/" + month + "/" + year;
+                    }
                     mDateText.setText(mDate);
           }
 
           @Override
           public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                    String amOrPm = "am";
+                    mTime = generateTimeInAmOrPm (hourOfDay,minute);
                     mHour = hourOfDay;
                     mMinute = minute;
-                    if(hourOfDay > 12){
-                              hourOfDay = hourOfDay%12;
-                              amOrPm = "pm";
-                    }
-                    if (minute < 10) {
-                              mTime = hourOfDay + ":" + "0" + minute+amOrPm;
-                    } else {
-                              mTime = hourOfDay + ":" + minute+amOrPm;
-                    }
-                    if(hourOfDay < 10){
-                              mTime = "0"+mTime;
-                    }
                     mTimeText.setText(mTime);
           }
 
@@ -395,7 +482,8 @@ class AddReminder extends AppCompatActivity implements
                               // Call the ContentResolver to delete the reminder at the given content URI.
                               // Pass in null for the selection and selection args because the mCurrentreminderUri
                               // content URI already identifies the reminder that we want.
-                              int rowsDeleted = getContentResolver().delete(mCurrentReminderUri, null, null);
+                              int rowsDeleted = getContentResolver().delete(mCurrentReminderUri,
+                                        null, null);
 
                               // Show a toast message depending on whether or not the delete was successful.
                               if (rowsDeleted == 0) {
@@ -413,11 +501,218 @@ class AddReminder extends AppCompatActivity implements
                     finish();
           }
 
+          // save reminder
+          public void saveEventReminder(){
+
+                    ContentValues values = new ContentValues();
+
+                    values.put(ERContract.EREntry.EVENT_TITLE, mTitle);
+                    values.put(ERContract.EREntry.EVENT_DATE, mDate);
+                    values.put(ERContract.EREntry.EVENT_TIME, mTime);
+                    values.put(ERContract.EREntry.EVENT_REPEAT, mRepeat);
+                    values.put(ERContract.EREntry.EVENT_REPEAT_NO, mRepeatNo);
+                    values.put(ERContract.EREntry.EVENT_REPEAT_TYPE, mRepeatType);
+                    //values.put(ERContract.EREntry.EVENT_ACTIVE, mActive);
+
+
+                    // Set up calender for creating the notification
+                    mCalendar.set(Calendar.MONTH, --mMonth);
+                    mCalendar.set(Calendar.YEAR, mYear);
+                    mCalendar.set(Calendar.DAY_OF_MONTH, mDay);
+                    mCalendar.set(Calendar.HOUR_OF_DAY, mHour);
+                    mCalendar.set(Calendar.MINUTE, mMinute);
+                    mCalendar.set(Calendar.SECOND, 0);
+
+                    long selectedTimestamp =  mCalendar.getTimeInMillis();
+
+                    // Check repeat type
+                    switch (mRepeatType) {
+                              case "Minute":
+                                        mRepeatTime =
+                                                  Integer.parseInt (mRepeatNo) * milMinute;
+                                        break;
+                              case "Hour":
+                                        mRepeatTime =
+                                                  Integer.parseInt (mRepeatNo) * milHour;
+                                        break;
+                              case "Day":
+                                        mRepeatTime =
+                                                  Integer.parseInt (mRepeatNo) * milDay;
+                                        break;
+                              case "Week":
+                                        mRepeatTime =
+                                                  Integer.parseInt (mRepeatNo) * milWeek;
+                                        break;
+                              case "Month":
+                                        mRepeatTime =
+                                                  Integer.parseInt (mRepeatNo) * milMonth;
+                                        break;
+                    }
+
+                    if (mCurrentReminderUri == null) {
+                              // This is a NEW reminder, so insert a new reminder into the provider,
+                              // returning the content URI for the new reminder.
+                              Uri newUri = getContentResolver().insert(ERContract.EREntry.CONTENT_URI,
+                                        values);
+
+                              // Show a toast message depending on whether or not the insertion was successful.
+                              if (newUri == null) {
+                                        // If the new content URI is null, then there was an error with insertion.
+                                        Toast.makeText(this,
+                                                  getString(R.string.EditorInsertReminderFailed),
+                                                  Toast.LENGTH_LONG).show();
+                              } else {
+                                        // Otherwise, the insertion was successful and we can display a toast.
+                                        Toast.makeText(this,
+                                                  getString(R.string.EditorInsertReminderSuccessful),
+                                                  Toast.LENGTH_LONG).show();
+                              }
+                    }
+                    else {
+
+                              int rowsAffected = getContentResolver().update(mCurrentReminderUri, values, null, null);
+
+                              // Show a toast message depending on whether or not the update was successful.
+                              if (rowsAffected == 0) {
+                                        // If no rows were affected, then there was an error with the update.
+                                        Toast.makeText(this,
+                                                  getString(R.string.EditorUpdateReminderFailed),
+                                                  Toast.LENGTH_SHORT).show();
+                              } else {
+                                        // Otherwise, the update was successful and we can display a toast.
+                                        Toast.makeText(this,
+                                                  getString(R.string.EditorUpdateReminderSuccessful),
+                                                  Toast.LENGTH_SHORT).show();
+                              }
+                    }
+
+                    // Create a new notification
+                    if (mActive.equals("true")) {
+                              if (mRepeat.equals("true")) {
+                                        new ERScheduler ().setRepeatAlarm(getApplicationContext(),
+                                                  selectedTimestamp,
+                                                  mCurrentReminderUri,
+                                                  mRepeatTime);
+                              } else if (mRepeat.equals("false")) {
+                                        new ERScheduler ().setAlarm(getApplicationContext(),
+                                                  selectedTimestamp,
+                                                  mCurrentReminderUri);
+                              }
+
+                              Toast.makeText(this, "Alarm time is " + selectedTimestamp,
+                                        Toast.LENGTH_LONG).show();
+                    }
+
+                    // Create toast to confirm new reminder
+                    Toast.makeText(getApplicationContext(), "Saved",
+                              Toast.LENGTH_LONG).show();
+
+          }
+
           // On pressing the back button
           @Override
           public void onBackPressed() {
                     super.onBackPressed();
 
           }
+
+          private String generateTimeInAmOrPm( int hourOfDay, int minute){
+                    String amOrPm = "am";
+                    String time;
+                    if(hourOfDay > 12){
+                              hourOfDay = hourOfDay%12;
+                              amOrPm = "pm";
+                    }
+                    if (minute < 10) {
+                              time= hourOfDay + ":" + "0" + minute+amOrPm;
+                    } else {
+                              time=  hourOfDay + ":" + minute+amOrPm;
+                    }
+                    if(hourOfDay < 10){
+                              time = "0"+time;
+                    }
+                    return time;
+          }
+
+          // LoaderManager overridden functions
+          @Override
+          public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+                    String[] projection = {
+                              ERContract.EREntry.EVENT_ID,
+                              ERContract.EREntry.EVENT_TITLE,
+                              ERContract.EREntry.EVENT_DATE,
+                              ERContract.EREntry.EVENT_TIME,
+                              ERContract.EREntry.EVENT_REPEAT,
+                              ERContract.EREntry.EVENT_REPEAT_NO,
+                              ERContract.EREntry.EVENT_REPEAT_TYPE
+                    };
+                    // This loader will execute the ContentProvider's query method on a background thread
+                    return new CursorLoader(this,   // Parent activity context
+                              mCurrentReminderUri,         // Query the content URI for the current reminder
+                              projection,             // Columns to include in the resulting Cursor
+                              null,                   // No selection clause
+                              null,                   // No selection arguments
+                              null);                  // Default sort order
+          }
+
+          @Override
+          public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+                    if (cursor == null || cursor.getCount() < 1) {
+                              return;
+                    }
+
+                    // Proceed with moving to the first row of the cursor and reading data from it
+                    // (This should be the only row in the cursor)
+                    if (cursor.moveToFirst()) {
+                              int titleColumnIndex = cursor.getColumnIndex(ERContract.EREntry.EVENT_TITLE);
+                              int dateColumnIndex = cursor.getColumnIndex(ERContract.EREntry.EVENT_DATE);
+                              int timeColumnIndex = cursor.getColumnIndex(ERContract.EREntry.EVENT_TIME);
+                              int repeatColumnIndex = cursor.getColumnIndex(ERContract.EREntry.EVENT_REPEAT);
+                              int repeatNoColumnIndex = cursor.getColumnIndex(ERContract.EREntry.EVENT_REPEAT_NO);
+                              int repeatTypeColumnIndex = cursor.getColumnIndex(ERContract.EREntry.EVENT_REPEAT_TYPE);
+                              //int activeColumnIndex = cursor.getColumnIndex(ERContract.EREntry.EVENT_ACTIVE);
+
+                              // Extract out the value from the Cursor for the given column index
+                              String title = cursor.getString(titleColumnIndex);
+                              String date = cursor.getString(dateColumnIndex);
+                              String time = cursor.getString(timeColumnIndex);
+                              String repeat = cursor.getString(repeatColumnIndex);
+                              String repeatNo = cursor.getString(repeatNoColumnIndex);
+                              String repeatType = cursor.getString(repeatTypeColumnIndex);
+                              //String active = cursor.getString(activeColumnIndex);
+
+                              mOldTitl = title;
+                              int hour = Integer.parseInt (time.substring (0,2));
+                              int minutes = Integer.parseInt (time.substring (3,5));
+                              int dateN = Integer.parseInt (date.substring (0,2));
+                              int monthN = Integer.parseInt (date.substring (3,5));
+                              int year = Integer.parseInt (date.substring (6,10));
+
+                              // Update the views on the screen with the values from the database
+                              mTitleText.setText(title);
+                              mDateText.setText(date);
+                              mTimeText.setText(time);
+                              mRepeatNoText.setText(repeatNo);
+                              mRepeatTypeText.setText(repeatType);
+                              mRepeatText.setText("Every " + repeatNo + " " + repeatType + "(s)");
+                              // Setup up active buttons
+                              // Setup repeat switch
+                              if (repeat.equals("false")) {
+                                        mRepeatSwitch.setChecked(false);
+                                        mRepeatText.setText(R.string.RepeatOff);
+                                        mRepeat = "false";
+                              } else if (repeat.equals("true")) {
+                                        mRepeatSwitch.setChecked(true);
+                                        mRepeat = "true";
+                              }
+
+                    }
+          }
+
+          @Override
+          public void onLoaderReset(Loader<Cursor> loader) {
+
+          }
+
 
 }

@@ -24,4 +24,9 @@
     <string name="EditorDeleteReminderSuccessful">Reminder deleted successfully.</string>
     <string name="RepeatOff">off</string>
     <string name="AddReminderActivity_NewReminder">Add Reminder</string>
+    <string name="EditorInsertReminderFailed">Error with saving reminder</string>
+    <string name="EditorInsertReminderSuccessful">Event Scheduled successfully</string>
+    <string name="EditorUpdateReminderFailed">Error while updating the scheduled event</string>
+    <string name="EditorUpdateReminderSuccessful">Event updated successfully</string>
+    <string name="EditorActivityTitleEditReminder">Edit Reminder</string>
 </resources>
