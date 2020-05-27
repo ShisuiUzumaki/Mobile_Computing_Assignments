@@ -108,14 +108,18 @@ public class ERService extends IntentService {
                               Notification note = new NotificationCompat.Builder(this, channelId)
                                         .setContentTitle(getString(R.string.app_name))
                                         .setContentText(description)
+                                        .setColorized (true)
+                                        .setColor (getResources ().getColor (R.color.LightGreen))
+                                        .setPriority (NotificationCompat.PRIORITY_HIGH)
+                                        .setCategory (NotificationCompat.CATEGORY_EVENT)
                                         .setSmallIcon(R.drawable.ic_add_alert)
                                         .setContentIntent(operation)
                                         .addAction (R.mipmap.ic_launcher, "dismiss", piStopRingtone)
                                         .setAutoCancel(true)
-                                        .setColor (Color.BLUE)
                                         .build();
 
-                              NotificationManagerCompat manager = NotificationManagerCompat.from (getApplicationContext ());
+                              NotificationManagerCompat manager =
+                                        NotificationManagerCompat.from (getApplicationContext ());
                               manager.notify(NOTIFICATION_ID, note);
                               if(r != null && !r.isPlaying ()){
                                         r.play ();
@@ -129,13 +133,6 @@ public class ERService extends IntentService {
                               }
                     }
 
-//                    {r.play ();
-//                    try {
-//                              Thread.sleep (1000);
-//                    } catch (InterruptedException e) {
-//                              e.printStackTrace ();
-//                    }
-//                    r.stop ();}
 
           }
 }

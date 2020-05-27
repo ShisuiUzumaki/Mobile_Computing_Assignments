@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.NavUtils;
 import android.app.LoaderManager;;
 
@@ -39,6 +40,7 @@ import android.widget.Toast;
 
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Objects;
 
 import pk.edu.pucit.eventreminder.data.ERContract;
@@ -54,10 +56,13 @@ class AddReminder extends AppCompatActivity implements
           private static final int EXISTING_VEHICLE_LOADER = 24907;
 
           Toolbar myToolbar;
+          private ConstraintLayout clTime , clDate, clRepeat, clRepeatInterval, clRepeatType;
           private EditText mTitleText;
           private TextView mDateText, mTimeText, mRepeatText, mRepeatNoText, mRepeatTypeText;
           private Calendar mCalendar;
           private int mYear, mMonth, mHour, mMinute, mDay;
+          private int oldYear, oldMonth, oldHour, oldMinute, oldDay;
+          String oldAmOrPm;
           private long mRepeatTime;
           private Switch mRepeatSwitch;
           private String mTitle;
@@ -110,6 +115,16 @@ class AddReminder extends AppCompatActivity implements
                     Objects.requireNonNull (getSupportActionBar()).setHomeButtonEnabled(true);
                     Objects.requireNonNull (getSupportActionBar ()).setTitle("Add Reminder");
                     myToolbar.setSubtitle("by Shisui Uzumaki");
+
+                    // Constraint Layouts initialized
+                    clTime = findViewById (R.id.Time);
+                    clDate = findViewById (R.id.Date);
+                    clRepeat = findViewById (R.id.Repeat);
+                    clRepeatInterval = findViewById (R.id.RepeatInterval);
+                    clRepeatType = findViewById (R.id.RepeatType);
+
+                    // set on touch listeners on constraint layouts
+                    this.setOnTouchListeners ();
 
                     // set view by getting ids
                     mTitleText = findViewById(R.id.ReminderTitle);
@@ -164,7 +179,7 @@ class AddReminder extends AppCompatActivity implements
                     mRepeatNoText.setText(mRepeatNo);
                     mRepeatTypeText.setText(mRepeatType);
                     mRepeatSwitch.setChecked (true);
-                    mRepeatText.setText("Every " + mRepeatNo + " " + mRepeatType + "(s)");
+                    mRepeatText.setText(String.format ("Every %s %s(s)", mRepeatNo, mRepeatType));
                     Intent intent = getIntent();
                     mCurrentReminderUri = intent.getData();
                     // check if its a new reminder
@@ -216,8 +231,16 @@ class AddReminder extends AppCompatActivity implements
 
           }
 
+          private void setOnTouchListeners(){
+                    clTime.setOnTouchListener (mTouchListener);
+                    clDate.setOnTouchListener (mTouchListener);
+                    clRepeatType.setOnTouchListener (mTouchListener);
+                    clRepeatInterval.setOnTouchListener (mTouchListener);
+
+          }
+
           @Override
-          protected void onSaveInstanceState (Bundle outState) {
+          protected void onSaveInstanceState (@NonNull Bundle outState) {
                     super.onSaveInstanceState(outState);
 
                     outState.putCharSequence(KEY_TITLE, mTitleText.getText());
@@ -311,6 +334,7 @@ class AddReminder extends AppCompatActivity implements
           // On clicking the repeat switch
           public void onSwitchRepeat(View view) {
                     boolean on = ((Switch) view).isChecked();
+                    mReminderHasChanged = true;
                     if (on) {
                               mRepeat = "true";
                               if(mRepeatNo == null){
@@ -409,8 +433,11 @@ class AddReminder extends AppCompatActivity implements
           @Override
           public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                     mDay = dayOfMonth;
+                    oldDay = dayOfMonth;
                     mMonth = month+1;
+                    oldMinute = month+1;
                     mYear = year;
+                    oldYear = year;
                     month = month +1;
                     if(month < 10){
                               mDate = dayOfMonth + "/0" + month + "/" + year;
@@ -424,7 +451,9 @@ class AddReminder extends AppCompatActivity implements
           public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                     mTime = generateTimeInAmOrPm (hourOfDay,minute);
                     mHour = hourOfDay;
+                    oldHour = hourOfDay;
                     mMinute = minute;
+                    oldMinute = minute;
                     mTimeText.setText(mTime);
           }
 
@@ -506,6 +535,20 @@ class AddReminder extends AppCompatActivity implements
 
                     ContentValues values = new ContentValues();
 
+                    if(!mReminderHasChanged){
+                         mHour = oldHour;
+                         mMinute = oldMinute;
+                         mYear = oldYear;
+                         mDay = oldDay;
+                         mMonth = oldMonth;
+                         mTime = generateTimeInAmOrPm (mHour,mMinute);
+                              if(mMonth < 10){
+                                        mDate = mDay + "/0" + mMonth + "/" + mYear;
+                              }else{
+                                        mDate = mDay + "/" + mMonth + "/" + mYear;
+                              }
+                    }
+
                     values.put(ERContract.EREntry.EVENT_TITLE, mTitle);
                     values.put(ERContract.EREntry.EVENT_DATE, mDate);
                     values.put(ERContract.EREntry.EVENT_TIME, mTime);
@@ -514,8 +557,12 @@ class AddReminder extends AppCompatActivity implements
                     values.put(ERContract.EREntry.EVENT_REPEAT_TYPE, mRepeatType);
                     //values.put(ERContract.EREntry.EVENT_ACTIVE, mActive);
 
+                    //Getting current time in milly
+                    mCalendar.clear (Calendar.SECOND);
+                    long timeNow = mCalendar.getTimeInMillis ();
 
                     // Set up calender for creating the notification
+                    mCalendar.clear ();
                     mCalendar.set(Calendar.MONTH, --mMonth);
                     mCalendar.set(Calendar.YEAR, mYear);
                     mCalendar.set(Calendar.DAY_OF_MONTH, mDay);
@@ -587,7 +634,8 @@ class AddReminder extends AppCompatActivity implements
                     }
 
                     // Create a new notification
-                    if (mActive.equals("true")) {
+                    if (mActive.equals("true") &&
+                              (selectedTimestamp >= timeNow || timeNow-  selectedTimestamp < milMinute)) {
                               if (mRepeat.equals("true")) {
                                         new ERScheduler ().setRepeatAlarm(getApplicationContext(),
                                                   selectedTimestamp,
@@ -682,19 +730,24 @@ class AddReminder extends AppCompatActivity implements
                               //String active = cursor.getString(activeColumnIndex);
 
                               mOldTitl = title;
-                              int hour = Integer.parseInt (time.substring (0,2));
-                              int minutes = Integer.parseInt (time.substring (3,5));
-                              int dateN = Integer.parseInt (date.substring (0,2));
-                              int monthN = Integer.parseInt (date.substring (3,5));
-                              int year = Integer.parseInt (date.substring (6,10));
+                              oldHour = Integer.parseInt (time.substring (0,2));
+                              oldMinute = Integer.parseInt (time.substring (3,5));
+                              oldAmOrPm = time.substring (5,7);
+                              oldDay = Integer.parseInt (date.substring (0,2));
+                              oldMonth = Integer.parseInt (date.substring (3,5));
+                              oldYear = Integer.parseInt (date.substring (6,10));
 
-                              // Update the views on the screen with the values from the database
+                              if(oldAmOrPm.equals ("pm")){
+                                        oldHour=oldHour + 12;
+                              }
+
+
                               mTitleText.setText(title);
                               mDateText.setText(date);
                               mTimeText.setText(time);
                               mRepeatNoText.setText(repeatNo);
                               mRepeatTypeText.setText(repeatType);
-                              mRepeatText.setText("Every " + repeatNo + " " + repeatType + "(s)");
+                              mRepeatText.setText(String.format ("Every %s %s(s)", repeatNo, repeatType));
                               // Setup up active buttons
                               // Setup repeat switch
                               if (repeat.equals("false")) {
