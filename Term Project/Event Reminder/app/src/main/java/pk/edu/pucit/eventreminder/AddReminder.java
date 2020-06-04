@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -54,6 +55,7 @@ class AddReminder extends AppCompatActivity implements
 
 
           private static final int EXISTING_VEHICLE_LOADER = 24907;
+          private static final String TAG = AddReminder.class.getSimpleName ();
 
           Toolbar myToolbar;
           private ConstraintLayout clTime , clDate, clRepeat, clRepeatInterval, clRepeatType;
@@ -444,6 +446,9 @@ class AddReminder extends AppCompatActivity implements
                     }else{
                               mDate = dayOfMonth + "/" + month + "/" + year;
                     }
+                    if(mDay < 10){
+                              mDate = "0"+mDate;
+                    }
                     mDateText.setText(mDate);
           }
 
@@ -546,6 +551,9 @@ class AddReminder extends AppCompatActivity implements
                                         mDate = mDay + "/0" + mMonth + "/" + mYear;
                               }else{
                                         mDate = mDay + "/" + mMonth + "/" + mYear;
+                              }
+                              if(mDay < 10){
+                                        mDate = "0"+mDate;
                               }
                     }
 
@@ -705,61 +713,65 @@ class AddReminder extends AppCompatActivity implements
 
           @Override
           public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-                    if (cursor == null || cursor.getCount() < 1) {
-                              return;
-                    }
+                   try{
+                             if (cursor == null || cursor.getCount() < 1) {
+                                       return;
+                             }
 
-                    // Proceed with moving to the first row of the cursor and reading data from it
-                    // (This should be the only row in the cursor)
-                    if (cursor.moveToFirst()) {
-                              int titleColumnIndex = cursor.getColumnIndex(ERContract.EREntry.EVENT_TITLE);
-                              int dateColumnIndex = cursor.getColumnIndex(ERContract.EREntry.EVENT_DATE);
-                              int timeColumnIndex = cursor.getColumnIndex(ERContract.EREntry.EVENT_TIME);
-                              int repeatColumnIndex = cursor.getColumnIndex(ERContract.EREntry.EVENT_REPEAT);
-                              int repeatNoColumnIndex = cursor.getColumnIndex(ERContract.EREntry.EVENT_REPEAT_NO);
-                              int repeatTypeColumnIndex = cursor.getColumnIndex(ERContract.EREntry.EVENT_REPEAT_TYPE);
-                              //int activeColumnIndex = cursor.getColumnIndex(ERContract.EREntry.EVENT_ACTIVE);
+                             // Proceed with moving to the first row of the cursor and reading data from it
+                             // (This should be the only row in the cursor)
+                             if (cursor.moveToFirst()) {
+                                       int titleColumnIndex = cursor.getColumnIndex(ERContract.EREntry.EVENT_TITLE);
+                                       int dateColumnIndex = cursor.getColumnIndex(ERContract.EREntry.EVENT_DATE);
+                                       int timeColumnIndex = cursor.getColumnIndex(ERContract.EREntry.EVENT_TIME);
+                                       int repeatColumnIndex = cursor.getColumnIndex(ERContract.EREntry.EVENT_REPEAT);
+                                       int repeatNoColumnIndex = cursor.getColumnIndex(ERContract.EREntry.EVENT_REPEAT_NO);
+                                       int repeatTypeColumnIndex = cursor.getColumnIndex(ERContract.EREntry.EVENT_REPEAT_TYPE);
+                                       //int activeColumnIndex = cursor.getColumnIndex(ERContract.EREntry.EVENT_ACTIVE);
 
-                              // Extract out the value from the Cursor for the given column index
-                              String title = cursor.getString(titleColumnIndex);
-                              String date = cursor.getString(dateColumnIndex);
-                              String time = cursor.getString(timeColumnIndex);
-                              String repeat = cursor.getString(repeatColumnIndex);
-                              String repeatNo = cursor.getString(repeatNoColumnIndex);
-                              String repeatType = cursor.getString(repeatTypeColumnIndex);
-                              //String active = cursor.getString(activeColumnIndex);
+                                       // Extract out the value from the Cursor for the given column index
+                                       String title = cursor.getString(titleColumnIndex);
+                                       String date = cursor.getString(dateColumnIndex);
+                                       String time = cursor.getString(timeColumnIndex);
+                                       String repeat = cursor.getString(repeatColumnIndex);
+                                       String repeatNo = cursor.getString(repeatNoColumnIndex);
+                                       String repeatType = cursor.getString(repeatTypeColumnIndex);
+                                       //String active = cursor.getString(activeColumnIndex);
 
-                              mOldTitl = title;
-                              oldHour = Integer.parseInt (time.substring (0,2));
-                              oldMinute = Integer.parseInt (time.substring (3,5));
-                              oldAmOrPm = time.substring (5,7);
-                              oldDay = Integer.parseInt (date.substring (0,2));
-                              oldMonth = Integer.parseInt (date.substring (3,5));
-                              oldYear = Integer.parseInt (date.substring (6,10));
+                                       mOldTitl = title;
+                                       oldHour = Integer.parseInt (time.substring (0,2));
+                                       oldMinute = Integer.parseInt (time.substring (3,5));
+                                       oldAmOrPm = time.substring (5,7);
+                                       oldDay = Integer.parseInt (date.substring (0,2));
+                                       oldMonth = Integer.parseInt (date.substring (3,5));
+                                       oldYear = Integer.parseInt (date.substring (6,10));
 
-                              if(oldAmOrPm.equals ("pm")){
-                                        oldHour=oldHour + 12;
-                              }
+                                       if(oldAmOrPm.equals ("pm")){
+                                                 oldHour=oldHour + 12;
+                                       }
 
 
-                              mTitleText.setText(title);
-                              mDateText.setText(date);
-                              mTimeText.setText(time);
-                              mRepeatNoText.setText(repeatNo);
-                              mRepeatTypeText.setText(repeatType);
-                              mRepeatText.setText(String.format ("Every %s %s(s)", repeatNo, repeatType));
-                              // Setup up active buttons
-                              // Setup repeat switch
-                              if (repeat.equals("false")) {
-                                        mRepeatSwitch.setChecked(false);
-                                        mRepeatText.setText(R.string.RepeatOff);
-                                        mRepeat = "false";
-                              } else if (repeat.equals("true")) {
-                                        mRepeatSwitch.setChecked(true);
-                                        mRepeat = "true";
-                              }
+                                       mTitleText.setText(title);
+                                       mDateText.setText(date);
+                                       mTimeText.setText(time);
+                                       mRepeatNoText.setText(repeatNo);
+                                       mRepeatTypeText.setText(repeatType);
+                                       mRepeatText.setText(String.format ("Every %s %s(s)", repeatNo, repeatType));
+                                       // Setup up active buttons
+                                       // Setup repeat switch
+                                       if (repeat.equals("false")) {
+                                                 mRepeatSwitch.setChecked(false);
+                                                 mRepeatText.setText(R.string.RepeatOff);
+                                                 mRepeat = "false";
+                                       } else if (repeat.equals("true")) {
+                                                 mRepeatSwitch.setChecked(true);
+                                                 mRepeat = "true";
+                                       }
 
-                    }
+                             }
+                   }catch(Exception exc){
+                             Log.e (TAG, exc.getMessage());
+                   }
           }
 
           @Override

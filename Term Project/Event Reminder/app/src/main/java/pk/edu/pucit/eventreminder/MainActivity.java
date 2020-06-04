@@ -14,16 +14,24 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.StackView;
 import android.widget.TextView;
+
+import com.google.android.material.tabs.TabLayout;
+
+import java.util.Objects;
 
 import pk.edu.pucit.eventreminder.data.ERContract;
 
 public class MainActivity extends AppCompatActivity implements
           LoaderManager.LoaderCallbacks<Cursor>,
           ERAdaptor.OnEventClickListener {
+
+          private static final String TAG = MainActivity.class.getSimpleName ();
 
           RecyclerView events;
           ERAdaptor mRVAdaptor;
@@ -52,16 +60,23 @@ public class MainActivity extends AppCompatActivity implements
 
           @Override
           public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-                    switch(item.getItemId ()){
-                              case R.id.Add:
-                                        startActivity (new Intent (this, AddReminder.class));
-                                        break;
-                              case R.id.Settings:
-                                        break;
-                              case R.id.Help:
-                                        break;
-                              default:
-                                        // TODO  mention sth here
+                    try {
+                              switch(item.getItemId ()){
+                                        case R.id.Add:
+                                                  startActivity (new Intent (this, AddReminder.class));
+                                                  break;
+                                        case R.id.Settings:
+                                                  Intent settings = new Intent (this, ERSettings.class);
+                                                  startActivity (settings);
+                                                  break;
+                                        case R.id.Help:
+                                                  break;
+                                        default:
+                                                  // TODO  mention sth here
+                                                  throw new IllegalArgumentException ("Item not found");
+                              }
+                    }catch (Exception exc){
+                              Log.e(TAG, Objects.requireNonNull (exc.getMessage ()));
                     }
                     return true;
           }

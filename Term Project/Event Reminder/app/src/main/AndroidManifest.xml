@@ -14,6 +14,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:parentActivityName=".MainActivity"
+            android:name=".ERSettings"
+            android:label="@string/title_activity_e_r_settings" />
+
         <receiver
             android:name=".eventReminder.ERReceiver"
             android:enabled="true"
@@ -40,8 +45,9 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".eventReminder.ERService"
-            android:exported="false"/>
+        <service
+            android:name=".eventReminder.ERService"
+            android:exported="false" />
     </application>
 
 </manifest>

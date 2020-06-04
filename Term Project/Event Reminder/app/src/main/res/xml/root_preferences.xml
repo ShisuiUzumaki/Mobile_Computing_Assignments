@@ -1,0 +1,44 @@
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <PreferenceCategory
+        android:title="General Options">
+
+        <SwitchPreference
+            android:icon="@drawable/ic_vibration"
+            android:defaultValue="false"
+            android:key="SetVibration"
+            android:title="Vibration"
+            android:summary="Allows you to set vibration when an alarm rings"/>
+
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="User Personal Info">
+
+        <EditTextPreference
+            android:defaultValue=""
+            android:icon="@drawable/ic_user"
+            android:key="EPUserName"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="User Name"
+            android:dialogTitle="User name"
+            android:dialogMessage="Enter your name"
+            android:dialogIcon="@drawable/ic_user"
+            android:summary="Click here to enter your name"/>
+        <EditTextPreference
+            android:defaultValue=""
+            android:icon="@drawable/ic_email"
+            android:key="EPUserEmail"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="User Email"
+            android:dialogTitle="User Email"
+            android:dialogIcon="@drawable/ic_email"
+            android:dialogMessage="Enter your email"
+            android:summary="Click here to enter your email"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>
