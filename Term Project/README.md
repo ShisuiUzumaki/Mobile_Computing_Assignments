@@ -18,8 +18,8 @@ MainActivity is also responsible for showing all the saved reminders and when yo
  - Repeat (Not part of proposal)
  - Repeat No (Not part of proposal)
  - Repeat Interval (Not part of proposal)
-for the reminder
-It only has **Save Reminder** Option when opened for **Add Reminder** but it has a **Delete Reminder** button when opened up as **Edit Reminder** .
+
+for the Add Reminder It only has **Save Reminder** Option when opened for **Add Reminder** but it has a **Delete Reminder** button when opened up as **Edit Reminder** .
 
 ***ERSettings.java***: Allows you to store your name and email address. It also provides an option for vibration that needs to be tested on mobile phone since it can't be tested on laptop but it doesn't throw an exception. 
 
