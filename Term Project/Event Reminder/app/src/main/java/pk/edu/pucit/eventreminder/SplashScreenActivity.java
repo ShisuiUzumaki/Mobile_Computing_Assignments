@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -17,14 +18,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
+          private static final String TAG = SplashScreenActivity.class.getSimpleName ();
+
           Animation fromLeft, fromRight;
           @Override
           protected void onCreate(Bundle savedInstanceState) {
                     super.onCreate (savedInstanceState);
                     setContentView (R.layout.activity_splash_screen);
-
-
-
                     //perform animations
                     TextView tv = findViewById (R.id.SplashScreenText);
                     CircleImageView civ = findViewById (R.id.EventHandlerIcon);
@@ -36,17 +36,22 @@ public class SplashScreenActivity extends AppCompatActivity {
                     // Hide action bar
                     Objects.requireNonNull (getSupportActionBar ()).hide();
 
-
-                    //start and finish thread
-                    new Handler ().postDelayed (new Runnable () {
-                              @Override
-                              public void run() {
-                                        Intent i = new Intent(SplashScreenActivity.this, MainActivity.class);
-                                        startActivity(i);
-                                        finish();
-                              }
-                    }, 2500);
+                    try{
+                              //start and finish thread
+                              new Handler ().postDelayed (new Runnable () {
+                                        @Override
+                                        public void run() {
+                                                  Intent i = new
+                                                            Intent(SplashScreenActivity.this,
+                                                            MainActivity.class);
+                                                  SplashScreenActivity.this.startActivity(i);
+                                                  finish();
+                                        }
+                              }, 2500);
+                    }
+                    catch(Exception exc){
+                              Log.e (TAG, Objects.requireNonNull (exc.getMessage ()));
+                    }
           }
-
 
 }
