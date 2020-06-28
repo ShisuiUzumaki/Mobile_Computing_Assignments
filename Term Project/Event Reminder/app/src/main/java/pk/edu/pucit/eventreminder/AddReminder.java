@@ -57,13 +57,23 @@ class AddReminder extends AppCompatActivity implements
 
 
           private static final int EXISTING_VEHICLE_LOADER = 24907;
+
+          // TAG to be logged
           private static final String TAG = AddReminder.class.getSimpleName ();
 
+          // Toolbar to be displayed
           Toolbar myToolbar;
+
+          // constraint layouts
           private ConstraintLayout clTime , clDate, clRepeat, clRepeatInterval, clRepeatType;
+          // Title of reminder
           private EditText mTitleText;
+          // TextViews for details
           private TextView mDateText, mTimeText, mRepeatText, mRepeatNoText, mRepeatTypeText;
+          // Calendar to manage time
           private Calendar mCalendar;
+
+          // Other variable to be used for java coding
           private int mYear, mMonth, mHour, mMinute, mDay;
           private int oldYear, oldMonth, oldHour, oldMinute, oldDay;
           String oldAmOrPm;
@@ -619,6 +629,7 @@ class AddReminder extends AppCompatActivity implements
                                                   getString(R.string.EditorInsertReminderFailed),
                                                   Toast.LENGTH_LONG).show();
                               } else {
+                                        mCurrentReminderUri = newUri;
                                         // Otherwise, the insertion was successful and we can display a toast.
                                         Toast.makeText(this,
                                                   getString(R.string.EditorInsertReminderSuccessful),

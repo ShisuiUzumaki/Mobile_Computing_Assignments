@@ -36,14 +36,18 @@ public class ERService extends IntentService {
 
           private static final int PI_REQUEST_CODE = 0;
           private static Vibrator vibrator;
-          private static SharedPreferences eventReminderSP;
+
+          // For ringtone management
           private static final Uri notification = RingtoneManager.getDefaultUri (
                     RingtoneManager.TYPE_RINGTONE);
           private static Ringtone r = null;
 
-          private static final String TAG = ERService.class.getSimpleName(); //TAG to be used in constructor
-          private static final int NOTIFICATION_ID = 25342;  //id for notification
-          Cursor  cursor;  // cursor for handling data of an event and providing it to activity to show to user
+          // TAG to be used in constructor
+          private static final String TAG = ERService.class.getSimpleName();
+          //id for notification
+          private static final int NOTIFICATION_ID = 25342;
+          // cursor for handling data of an event and providing it to activity to show to user
+          Cursor  cursor;
 
           public ERService() {
                     super (TAG);
@@ -137,7 +141,9 @@ public class ERService extends IntentService {
                                         if(r != null && !r.isPlaying ()){
                                                   r.play ();
                                         }
-                                        eventReminderSP = PreferenceManager.getDefaultSharedPreferences (this);
+                                        SharedPreferences
+                                                  eventReminderSP =
+                                                  PreferenceManager.getDefaultSharedPreferences (this);
                                         boolean isVibrate = eventReminderSP.getBoolean ("SetVibration", false);
                                         if(isVibrate){
                                                   long[] pattern = {3000,1000};

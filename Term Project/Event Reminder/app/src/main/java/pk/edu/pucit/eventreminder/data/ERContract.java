@@ -8,11 +8,11 @@ import android.provider.BaseColumns;
 public class ERContract {
           private ERContract() {}
 
-          public static final String CONTENT_AUTHORITY = "pk.edu.pucit.eventreminder";
+          public static final String ER_CONTENT_AUTHORITY = "pk.edu.pucit.eventreminder";
 
           public static final String ER_TABLE_PATH= "er_reminderTable";
 
-          public static final Uri ER_BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+          public static final Uri ER_BASE_CONTENT_URI = Uri.parse("content://" + ER_CONTENT_AUTHORITY);
 
 
           public static final class EREntry implements BaseColumns {
@@ -22,12 +22,12 @@ public class ERContract {
 
                     public static final String CONTENT_LIST_TYPE =
                               ContentResolver.CURSOR_DIR_BASE_TYPE + "/" +
-                                        CONTENT_AUTHORITY + "/" +
+                                        ER_CONTENT_AUTHORITY + "/" +
                                         ER_TABLE_PATH;
 
                     public static final String CONTENT_ITEM_TYPE =
                               ContentResolver.CURSOR_ITEM_BASE_TYPE + "/"
-                                        + CONTENT_AUTHORITY + "/"
+                                        + ER_CONTENT_AUTHORITY + "/"
                                         + ER_TABLE_PATH;
 
                     public final static String TABLE_NAME = "events_reminders";

@@ -18,14 +18,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.StackView;
-import android.widget.TextView;
-
-import com.google.android.material.tabs.TabLayout;
 
 import java.util.Objects;
 
-import pk.edu.pucit.eventreminder.data.ERContract;
+import static pk.edu.pucit.eventreminder.data.ERContract.*;
 
 public class MainActivity extends AppCompatActivity implements
           LoaderManager.LoaderCallbacks<Cursor>,
@@ -36,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements
           RecyclerView events;
           ERAdaptor mRVAdaptor;
           ConstraintLayout emptyView;
-          private static final int VEHICLE_LOADER = 29374;
+          private static final int LOADER_ID = 29374;
 
           @Override
           protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements
                     events.setLayoutManager (new LinearLayoutManager (this));
                     mRVAdaptor = new ERAdaptor (this,null,this);
                     events.setAdapter (mRVAdaptor);
-                    getLoaderManager().initLoader(VEHICLE_LOADER, null, this);
+                    getLoaderManager().initLoader(LOADER_ID, null, this);
           }
 
           @Override
@@ -88,17 +84,17 @@ public class MainActivity extends AppCompatActivity implements
           @Override
           public Loader<Cursor> onCreateLoader(int id, Bundle args) {
                     String[] projection = {
-                              ERContract.EREntry.EVENT_ID,
-                              ERContract.EREntry.EVENT_TITLE,
-                              ERContract.EREntry.EVENT_DATE,
-                              ERContract.EREntry.EVENT_TIME,
-                              ERContract.EREntry.EVENT_REPEAT,
-                              ERContract.EREntry.EVENT_REPEAT_NO,
-                              ERContract.EREntry.EVENT_REPEAT_TYPE
+                              EREntry.EVENT_ID,
+                              EREntry.EVENT_TITLE,
+                              EREntry.EVENT_DATE,
+                              EREntry.EVENT_TIME,
+                              EREntry.EVENT_REPEAT,
+                              EREntry.EVENT_REPEAT_NO,
+                              EREntry.EVENT_REPEAT_TYPE
                     };
                     // This loader will execute the ContentProvider's query method on a background thread
                     return new CursorLoader (this,   // Parent activity context
-                              ERContract.EREntry.CONTENT_URI,         // Query the content URI for the current reminder
+                              EREntry.CONTENT_URI,         // Query the content URI for the current reminder
                               projection,             // Columns to include in the resulting Cursor
                               null,                   // No selection clause
                               null,                   // No selection arguments
@@ -125,11 +121,11 @@ public class MainActivity extends AppCompatActivity implements
           public void onEventClick(int position, long id) {
                     Intent intent = new Intent(MainActivity.this, AddReminder.class);
 
-                    Uri currentVehicleUri = ContentUris.withAppendedId(
-                              ERContract.EREntry.CONTENT_URI, id);
+                    //Generate URI to be passed to Edit Reminder
+                    Uri currentItemID = ContentUris.withAppendedId(EREntry.CONTENT_URI, id);
 
                     // Set the URI on the data field of the intent
-                    intent.setData(currentVehicleUri);
+                    intent.setData(currentItemID);
 
                     startActivity(intent);
 

@@ -12,3 +12,4 @@
 /captures
 .externalNativeBuild
 .cxx
+/app/src/main/java/pk/edu/pucit/eventreminder/BaseCursorAdaptor.java
