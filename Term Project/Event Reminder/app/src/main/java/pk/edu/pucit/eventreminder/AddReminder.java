@@ -1,19 +1,8 @@
 package pk.edu.pucit.eventreminder;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.NavUtils;
-import android.app.LoaderManager;;
-
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-//import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-//import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
-//import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
-
+import android.app.LoaderManager;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.CursorLoader;
@@ -21,10 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -41,13 +27,22 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.NavUtils;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Objects;
 
 import pk.edu.pucit.eventreminder.data.ERContract;
 import pk.edu.pucit.eventreminder.eventReminder.ERScheduler;
+
+;
+//import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+//import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
+//import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 public
 class AddReminder extends AppCompatActivity implements
@@ -691,6 +686,9 @@ class AddReminder extends AppCompatActivity implements
                     if(hourOfDay > 12){
                               hourOfDay = hourOfDay%12;
                               amOrPm = "pm";
+                    }
+                    if(hourOfDay == 0){
+                              hourOfDay = 12;
                     }
                     if (minute < 10) {
                               time= hourOfDay + ":" + "0" + minute+amOrPm;
