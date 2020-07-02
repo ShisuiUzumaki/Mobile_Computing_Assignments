@@ -12,7 +12,7 @@ public class ERDBHelper extends SQLiteOpenHelper {
 
           private static final int DATABASE_VERSION = 1;
 
-          ERDBHelper(@Nullable Context context) {
+          public ERDBHelper(@Nullable Context context) {
                     super (context, DATABASE_NAME, null, DATABASE_VERSION);
           }
 

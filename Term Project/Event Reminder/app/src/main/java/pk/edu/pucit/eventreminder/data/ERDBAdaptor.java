@@ -2,13 +2,34 @@ package pk.edu.pucit.eventreminder.data;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
 
-class ERDBAdaptor {
+public class ERDBAdaptor {
 
           private static final String LOG_TAG = ERDBHelper.class.getSimpleName();
+
+          public boolean queryReminder(ERDBHelper mDBHelper, ContentValues values){
+                    boolean flag = false;
+                    String[] selectionArgs = {
+                              values.get (ERContract.EREntry.EVENT_TIME)+"",
+                              values.get (ERContract.EREntry.EVENT_DATE)+""};
+                    SQLiteDatabase database = mDBHelper.getReadableDatabase ();
+                    Cursor cursor = database.query (ERContract.EREntry.TABLE_NAME,
+                              null,
+                              ERContract.EREntry.EVENT_TIME+"=? AND " +
+                                                  ERContract.EREntry.EVENT_DATE+"=?",
+                               selectionArgs,
+                              null,
+                              null,
+                              null);
+                    if(cursor.moveToNext ()){
+                              flag = true;
+                    }
+                    return flag;
+          }
 
           Uri insertReminder(ERDBHelper mDbHelper, Uri uri, ContentValues values) {
 

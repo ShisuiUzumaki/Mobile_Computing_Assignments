@@ -1,16 +1,16 @@
 package pk.edu.pucit.eventreminder;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.util.Log;
-import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Objects;
 
@@ -41,11 +41,10 @@ public class SplashScreenActivity extends AppCompatActivity {
                               new Handler ().postDelayed (new Runnable () {
                                         @Override
                                         public void run() {
-                                                  Intent i = new
-                                                            Intent(SplashScreenActivity.this,
+                                                  Intent i = new Intent(SplashScreenActivity.this,
                                                             MainActivity.class);
                                                   SplashScreenActivity.this.startActivity(i);
-                                                  finish();
+                                                  finish ();
                                         }
                               }, 2500);
                     }
@@ -54,4 +53,8 @@ public class SplashScreenActivity extends AppCompatActivity {
                     }
           }
 
+          @Override
+          public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
+                    super.onSaveInstanceState (outState, outPersistentState);
+          }
 }

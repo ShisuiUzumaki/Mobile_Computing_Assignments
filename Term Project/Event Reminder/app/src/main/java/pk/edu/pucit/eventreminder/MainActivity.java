@@ -1,27 +1,29 @@
 package pk.edu.pucit.eventreminder;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import android.app.LoaderManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.ContentUris;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.Objects;
 
-import static pk.edu.pucit.eventreminder.data.ERContract.*;
+import static pk.edu.pucit.eventreminder.data.ERContract.EREntry;
 
 public class MainActivity extends AppCompatActivity implements
           LoaderManager.LoaderCallbacks<Cursor>,
@@ -46,6 +48,17 @@ public class MainActivity extends AppCompatActivity implements
                     mRVAdaptor = new ERAdaptor (this,null,this);
                     events.setAdapter (mRVAdaptor);
                     getLoaderManager().initLoader(LOADER_ID, null, this);
+          }
+
+          @Override
+          public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
+                    super.onSaveInstanceState (outState, outPersistentState);
+                    Log.i (TAG, "On save instance state change");
+          }
+
+          @Override
+          public void onConfigurationChanged(@NonNull Configuration newConfig) {
+                    super.onConfigurationChanged (newConfig);
           }
 
           @Override
@@ -129,5 +142,23 @@ public class MainActivity extends AppCompatActivity implements
 
                     startActivity(intent);
 
+          }
+
+          @Override
+          protected void onPause() {
+                    super.onPause ();
+                    Log.i (TAG, "On pause called");
+          }
+
+          @Override
+          protected void onStop() {
+                    super.onStop ();
+                    Log.i (TAG, "On stop called");
+          }
+
+          @Override
+          protected void onDestroy() {
+                    super.onDestroy ();
+                    Log.i (TAG, "On destroy called");
           }
 }

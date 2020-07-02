@@ -9,23 +9,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Vibrator;
-import android.preference.Preference;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.core.app.TaskStackBuilder;
 import androidx.preference.PreferenceManager;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 import pk.edu.pucit.eventreminder.AddReminder;
@@ -35,17 +30,20 @@ import pk.edu.pucit.eventreminder.data.ERContract;
 public class ERService extends IntentService {
 
           private static final int PI_REQUEST_CODE = 0;
-          private static Vibrator vibrator;
+          public static Vibrator vibrator;
+
+          // ids
+          private static final String channelId = "12345";
 
           // For ringtone management
           private static final Uri notification = RingtoneManager.getDefaultUri (
                     RingtoneManager.TYPE_RINGTONE);
-          private static Ringtone r = null;
+          public static Ringtone r = null;
 
           // TAG to be used in constructor
           private static final String TAG = ERService.class.getSimpleName();
           //id for notification
-          private static final int NOTIFICATION_ID = 25342;
+          public static final int NOTIFICATION_ID = 25342;
           // cursor for handling data of an event and providing it to activity to show to user
           Cursor  cursor;
 
@@ -102,7 +100,6 @@ public class ERService extends IntentService {
                                                             cursor.close();
                                                   }
                                         }
-                                        String channelId = "12345";
 
                                         Intent stopRingtone = new Intent (getApplicationContext (), ERService.class);
                                         stopRingtone.putExtra ("stop","stop ringtone");
