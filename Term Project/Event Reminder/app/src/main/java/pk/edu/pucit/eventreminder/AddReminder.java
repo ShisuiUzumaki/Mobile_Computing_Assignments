@@ -37,7 +37,6 @@ import java.util.Calendar;
 import java.util.Objects;
 
 import pk.edu.pucit.eventreminder.data.ERContract;
-import pk.edu.pucit.eventreminder.data.ERDBAdaptor;
 import pk.edu.pucit.eventreminder.data.ERDBHelper;
 import pk.edu.pucit.eventreminder.eventReminder.ERScheduler;
 
@@ -128,9 +127,10 @@ class AddReminder extends AppCompatActivity implements
           // Uri in case user editing alarm
           private Uri
                     mCurrentReminderUri;
-          private boolean
-                    mReminderHasChanged =
-                    false;
+
+          // to check any details edited
+          private boolean mReminderHasChanged = false,  mDateChanged = false, mTimeChanged = false,
+                    mTitleChanged = false, mRepeatTypeChanged = false, mRepeatIntervalChanged = false ;
 
           // Values for orientation change
           private static final String
@@ -234,40 +234,19 @@ class AddReminder extends AppCompatActivity implements
                     mRepeatText.setText ("off");
 
                     // Initialize default values
-                    mActive =
-                              "true";
-                    mRepeat =
-                              "true";
-                    mRepeatNo =
-                              Integer.toString (1);
-                    mRepeatType =
-                              "Hour";
+                    mActive = "true";
+                    mRepeat = "true";
+                    mRepeatNo = Integer.toString (1);
+                    mRepeatType = "Hour";
 
-                    mCalendar =
-                              Calendar.getInstance ();
-                    mHour =
-                              mCalendar.get (Calendar.HOUR_OF_DAY);
-                    mMinute =
-                              mCalendar.get (Calendar.MINUTE);
-                    mYear =
-                              mCalendar.get (Calendar.YEAR);
-                    mMonth =
-                              mCalendar.get (Calendar.MONTH) + 1;
-                    mDay =
-                              mCalendar.get (Calendar.DATE);
-
-                    if (mMonth < 10) {
-                              mDate =
-                                        mDay + "/0" + mMonth + "/" + mYear;
-                    } else {
-                              mDate =
-                                        mDay + "/" + mMonth + "/" + mYear;
-                    }
-                    if(mDay < 10){
-                              mDate = "0"+ mDate;
-                    }
-                    mTime =
-                              generateTimeInAmOrPm (mHour, mMinute);
+                    mCalendar = Calendar.getInstance ();
+                    mHour = oldHour = mCalendar.get (Calendar.HOUR_OF_DAY);
+                    mMinute = oldMinute =  mCalendar.get (Calendar.MINUTE);
+                    mYear = oldYear = mCalendar.get (Calendar.YEAR);
+                    mMonth = oldMonth = mCalendar.get (Calendar.MONTH) + 1;
+                    mDay = oldDay =  mCalendar.get (Calendar.DATE);
+                    mDate = ERHelper.generateDateInProperFormat (mYear, mMonth, mDay);
+                    mTime = ERHelper.generateTimeInAmOrPm (mHour, mMinute);
 
                     // Setup Reminder Title EditText
                     mTitleText.addTextChangedListener (new TextWatcher () {
@@ -295,11 +274,8 @@ class AddReminder extends AppCompatActivity implements
                     mRepeatTypeText.setText (mRepeatType);
                     mRepeatSwitch.setChecked (true);
                     mRepeatText.setText (String.format ("Every %s %s(s)", mRepeatNo, mRepeatType));
-                    Intent
-                              intent =
-                              getIntent ();
-                    mCurrentReminderUri =
-                              intent.getData ();
+                    Intent intent = getIntent ();
+                    mCurrentReminderUri = intent.getData ();
                     // check if its a new reminder
                     if (mCurrentReminderUri == null) {
                               mOldTitl =
@@ -314,56 +290,33 @@ class AddReminder extends AppCompatActivity implements
                               getLoaderManager ().initLoader (EXISTING_VEHICLE_LOADER, null, this);
                     }
 
-//                    if(Build.VERSION.SDK_INT  >= Build.VERSION_CODES.LOLLIPOP){
-//                              myToolbar.setElevation(10f);
-//                    }
 
                     // To save state on device rotation
                     if (savedInstanceState != null) {
-                              String
-                                        savedTitle =
-                                        savedInstanceState.getString (KEY_TITLE);
+                              String savedTitle = savedInstanceState.getString (KEY_TITLE);
                               mTitleText.setText (savedTitle);
-                              mTitle =
-                                        savedTitle;
+                              mTitle = savedTitle;
 
-                              String
-                                        savedTime =
-                                        savedInstanceState.getString (KEY_TIME);
+                              String savedTime = savedInstanceState.getString (KEY_TIME);
                               mTimeText.setText (savedTime);
-                              mTime =
-                                        savedTime;
+                              mTime = savedTime;
 
-                              String
-                                        savedDate =
-                                        savedInstanceState.getString (KEY_DATE);
+                              String savedDate = savedInstanceState.getString (KEY_DATE);
                               mDateText.setText (savedDate);
-                              mDate =
-                                        savedDate;
+                              mDate = savedDate;
 
-                              String
-                                        saveRepeat =
-                                        savedInstanceState.getString (KEY_REPEAT);
+                              String saveRepeat = savedInstanceState.getString (KEY_REPEAT);
                               mRepeatText.setText (saveRepeat);
-                              mRepeat =
-                                        saveRepeat;
+                              mRepeat = saveRepeat;
 
-                              String
-                                        savedRepeatNo =
-                                        savedInstanceState.getString (KEY_REPEAT_NO);
+                              String savedRepeatNo = savedInstanceState.getString (KEY_REPEAT_NO);
                               mRepeatNoText.setText (savedRepeatNo);
-                              mRepeatNo =
-                                        savedRepeatNo;
+                              mRepeatNo = savedRepeatNo;
 
-                              String
-                                        savedRepeatType =
-                                        savedInstanceState.getString (KEY_REPEAT_TYPE);
+                              String savedRepeatType = savedInstanceState.getString (KEY_REPEAT_TYPE);
                               mRepeatTypeText.setText (savedRepeatType);
-                              mRepeatType =
-                                        savedRepeatType;
-
-                              mActive =
-                                        savedInstanceState.getString (KEY_ACTIVE);
+                              mRepeatType = savedRepeatType;
+                              mActive = savedInstanceState.getString (KEY_ACTIVE);
                     }
 
           }
@@ -604,47 +557,27 @@ class AddReminder extends AppCompatActivity implements
 
           @Override
           public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                    mDay =
-                              dayOfMonth;
-                    oldDay =
-                              dayOfMonth;
-                    mMonth =
-                              month + 1;
-                    oldMinute =
-                              month + 1;
-                    mYear =
-                              year;
-                    oldYear =
-                              year;
-                    month =
-                              month + 1;
-                    if (month < 10) {
-                              mDate =
-                                        dayOfMonth + "/0" + month + "/" + year;
-                    } else {
-                              mDate =
-                                        dayOfMonth + "/" + month + "/" + year;
-                    }
-                    if (mDay < 10) {
-                              mDate =
-                                        "0" + mDate;
-                    }
+                    mDay = dayOfMonth;
+                    oldDay = dayOfMonth;
+                    mMonth = month + 1;
+                    oldMonth = month + 1;
+                    mYear = year;
+                    oldYear = year;
+                    month = month + 1;
+                    mDate = ERHelper.generateDateInProperFormat (year, month, dayOfMonth);
                     mDateText.setText (mDate);
+                    mDateChanged = true;
           }
 
           @Override
           public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                    mTime =
-                              generateTimeInAmOrPm (hourOfDay, minute);
-                    mHour =
-                              hourOfDay;
-                    oldHour =
-                              hourOfDay;
-                    mMinute =
-                              minute;
-                    oldMinute =
-                              minute;
+                    mTime = ERHelper.generateTimeInAmOrPm (hourOfDay, minute);
+                    mHour = hourOfDay;
+                    oldHour = hourOfDay;
+                    mMinute = minute;
+                    oldMinute = minute;
                     mTimeText.setText (mTime);
+                    mTimeChanged = true;
           }
 
           private void showUnsavedChangesDialog(
@@ -739,34 +672,29 @@ class AddReminder extends AppCompatActivity implements
           // save reminder
           public void saveEventReminder() {
 
-                    ContentValues
-                              values =
-                              new ContentValues ();
+                    ContentValues values = new ContentValues ();
 
                     if (!mReminderHasChanged) {
-                              mHour =
-                                        oldHour;
-                              mMinute =
-                                        oldMinute;
-                              mYear =
-                                        oldYear;
-                              mDay =
-                                        oldDay;
-                              mMonth =
-                                        oldMonth;
-                              mTime =
-                                        generateTimeInAmOrPm (mHour, mMinute);
-                              if (mMonth < 10) {
-                                        mDate =
-                                                  mDay + "/0" + mMonth + "/" + mYear;
-                              } else {
-                                        mDate =
-                                                  mDay + "/" + mMonth + "/" + mYear;
-                              }
-                              if (mDay < 10) {
-                                        mDate =
-                                                  "0" + mDate;
-                              }
+                              mHour = oldHour;
+                              mMinute = oldMinute;
+                              mYear = oldYear;
+                              mDay = oldDay;
+                              mMonth = oldMonth;
+                              mTime = ERHelper.generateTimeInAmOrPm (mHour, mMinute);
+                              mDate = ERHelper.generateDateInProperFormat (mYear,mMonth,mDay);
+                    }
+
+                    if(!mTimeChanged && mReminderHasChanged){
+                              mHour = oldHour;
+                              mMinute = oldMinute;
+                              mTime = ERHelper.generateTimeInAmOrPm (mHour, mMinute);
+                    }
+
+                    if(!mDateChanged && mReminderHasChanged){
+                              mYear = oldYear;
+                              mDay = oldDay;
+                              mMonth = oldMonth;
+                              mDate = ERHelper.generateDateInProperFormat (mYear,mMonth,mDay);
                     }
 
                     values.put (ERContract.EREntry.EVENT_TITLE, mTitle);
@@ -779,9 +707,7 @@ class AddReminder extends AppCompatActivity implements
 
                     //Getting current time in milly
                     mCalendar.clear (Calendar.SECOND);
-                    long
-                              timeNow =
-                              mCalendar.getTimeInMillis ();
+                    long timeNow = mCalendar.getTimeInMillis ();
 
                     // Set up calender for creating the notification
                     mCalendar.clear ();
@@ -793,7 +719,7 @@ class AddReminder extends AppCompatActivity implements
                     mCalendar.set (Calendar.SECOND, 0);
 
                     long selectedTimestamp = mCalendar.getTimeInMillis ();
-                    if (sameTimeDateExists (values)) {
+                    if (ERHelper.sameTimeDateExists (values, mDBHelper)) {
                               // Check repeat type
                               switch (mRepeatType) {
                                         case "Minute":
@@ -886,13 +812,6 @@ class AddReminder extends AppCompatActivity implements
 
           }
 
-          boolean sameTimeDateExists(ContentValues values){
-                    boolean existFlag = false;
-                    ERDBAdaptor mERAdaptor = new ERDBAdaptor ();
-                    existFlag = !mERAdaptor.queryReminder (mDBHelper, values);
-                    return existFlag;
-          }
-
           // On pressing the back button
           @Override
           public void onBackPressed() {
@@ -900,6 +819,7 @@ class AddReminder extends AppCompatActivity implements
 
           }
 
+          // To create time text in proper format of am and pm
           private String generateTimeInAmOrPm(int hourOfDay, int minute) {
                     String
                               amOrPm =
@@ -928,6 +848,23 @@ class AddReminder extends AppCompatActivity implements
                                         "0" + time;
                     }
                     return time;
+          }
+
+          // to create date in proper format so that
+          // day, month are both in double digit
+          private String generateDateInProperFormat(int paramYear, int paramMonth,
+                                                    int paramDay){
+                    String dateGenerated = "";
+                    if (paramMonth < 10) {
+                              dateGenerated = paramDay + "/0" + paramMonth + "/" +
+                                        paramYear;
+                    } else {
+                              dateGenerated = paramDay + "/" + paramMonth + "/" + paramYear;
+                    }
+                    if (paramDay < 10) {
+                              dateGenerated = "0" + dateGenerated;
+                    }
+                    return dateGenerated;
           }
 
           // LoaderManager overridden functions
@@ -1022,6 +959,10 @@ class AddReminder extends AppCompatActivity implements
                                         if (oldAmOrPm.equals ("pm")) {
                                                   oldHour =
                                                             oldHour + 12;
+                                        }
+
+                                        if(oldAmOrPm.equals ("am") && oldHour == 12){
+                                                  oldHour = 0;
                                         }
 
 

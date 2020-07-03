@@ -79,7 +79,8 @@ public class ERContentProvider extends ContentProvider {
                                         break;
                               case REMINDER_ITEM_ID:
                                         selection = EREntry.EVENT_ID + "=?";
-                                        selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                                        selectionArgs = new String[] {
+                                                  String.valueOf(ContentUris.parseId(uri)) };
 
                                         cursor = database.query(EREntry.TABLE_NAME, projection, selection, selectionArgs,
                                                   null, null, sortOrder);
