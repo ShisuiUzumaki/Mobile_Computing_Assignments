@@ -128,6 +128,7 @@ public class ERService extends IntentService {
                                                   .setCategory (NotificationCompat.CATEGORY_EVENT)
                                                   .setSmallIcon(R.drawable.ic_add_alert)
                                                   .setContentIntent(operation)
+                                                  .setTicker ("An event has occurred")
                                                   .addAction (R.mipmap.ic_launcher, "dismiss", piStopRingtone)
                                                   .setAutoCancel(true)
                                                   .build();
